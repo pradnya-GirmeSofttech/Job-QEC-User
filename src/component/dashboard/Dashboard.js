@@ -41,7 +41,16 @@ const Dashboard = ({ children }) => {
   };
 
   const listItemStyle = (path) => {
-    return location.pathname === path ? "selected-item " : "list-item ";
+    if (location.pathname === path) {
+      return "selected-item ";
+    } else if (
+      path === "/dashboard/job" &&
+      location.pathname.startsWith("/dashboard/job")
+    ) {
+      return "selected-item ";
+    } else {
+      return "list-item ";
+    }
   };
 
   useEffect(() => {

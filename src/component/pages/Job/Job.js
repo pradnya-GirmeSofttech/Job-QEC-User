@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Container,
-  Typography,
   TextField,
   TableContainer,
   Paper,
@@ -17,24 +16,17 @@ import {
   MenuItem,
   TableRow,
   TablePagination,
-  Modal,
-  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteJob,
-  generatePDF,
-  getAllJob,
-  getSingleJob,
-} from "../../../actions/job";
+import { getAllJob } from "../../../actions/job";
 import { useDispatch, useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Loader from "../../loader/Loader";
 
 function Job() {
   const navigation = useNavigate();
   const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.job.jobs);
-  console.log(jobs);
+  const { jobs, loading } = useSelector((state) => state.job);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null); // Anchor element for the menu
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -86,11 +78,6 @@ function Job() {
     setSearchQuery(event.target.value); // Update the search query state
   };
 
-  // const downloadPDF = (id) => {
-  //   dispatch(generatePDF(id));
-  //   console.log("id", id);
-  // };
-
   // Filter jobs based on job name or SO/WO number
   const filteredJobs = jobs?.filter((job) => {
     const jobNameMatch = job?.jobName?.toLowerCase().includes(searchQuery);
@@ -100,76 +87,91 @@ function Job() {
 
   return (
     <Dashboard>
-      <Box>
-        <Container sx={{ display: "flex", justifyContent: "space-between" }}>
-          <h3>Jobs</h3>
-          <Box>
-            <TextField
-              label="Search"
-              id="outlined-size-small"
-              size="small"
-              onChange={handleSearch}
-            />
-          </Box>
-        </Container>
-        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>SO/WO No</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Total CT</TableCell>
-                <TableCell>Actual CT</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredJobs?.slice(startIndex, endIndex).map((job) => (
-                <TableRow key={job._id}>
-                  <TableCell>{job.soWo}</TableCell>
-                  <TableCell>{job.jobName}</TableCell>
-                  <TableCell>{job.estimatedtotalCT}</TableCell>
-                  <TableCell>{job.actualtotalCT}</TableCell>
-
-                  <TableCell>
-                    <IconButton
-                      aria-label="more"
-                      aria-controls={`job-options-${job._id}`}
-                      aria-haspopup="true"
-                      onClick={(event) => handleMenuOpen(event, job._id)}
-                    >
-                      <MoreHorizIcon />
-                    </IconButton>
-                    <Menu
-                      id={`job-options-${job._id}`}
-                      anchorEl={anchorEl}
-                      open={openMenuId === job._id}
-                      onClose={handleMenuClose}
-                    >
-                      <MenuItem onClick={() => handleEdit(job._id)}>
-                        Edit
-                      </MenuItem>
-                      <MenuItem onClick={() => handleView(job._id)}>
-                        View
-                      </MenuItem>
-                    </Menu>
-                  </TableCell>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Box>
+          <Container sx={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>Jobs</h3>
+            <Box>
+              <TextField
+                label="Search"
+                id="outlined-size-small"
+                size="small"
+                onChange={handleSearch}
+              />
+              <Button
+                sx={{
+                  backgroundColor: "#1d5393",
+                  color: "#fff",
+                  marginLeft: 2,
+                }}
+                onClick={() => {
+                  navigation("/dashboard/job/createjob");
+                }}
+              >
+                Add New Job
+              </Button>
+            </Box>
+          </Container>
+          <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>SO/WO No</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Total CT</TableCell>
+                  <TableCell>Actual CT</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {filteredJobs?.slice(startIndex, endIndex).map((job) => (
+                  <TableRow key={job._id}>
+                    <TableCell>{job.soWo}</TableCell>
+                    <TableCell>{job.jobName}</TableCell>
+                    <TableCell>{job.estimatedtotalCT}</TableCell>
+                    <TableCell>{job?.actualtotalCT}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="more"
+                        aria-controls={`job-options-${job._id}`}
+                        aria-haspopup="true"
+                        onClick={(event) => handleMenuOpen(event, job._id)}
+                      >
+                        <MoreHorizIcon />
+                      </IconButton>
+                      <Menu
+                        id={`job-options-${job._id}`}
+                        anchorEl={anchorEl}
+                        open={openMenuId === job._id}
+                        onClose={handleMenuClose}
+                      >
+                        <MenuItem onClick={() => handleEdit(job._id)}>
+                          Edit
+                        </MenuItem>
+                        <MenuItem onClick={() => handleView(job._id)}>
+                          View
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          component="div"
-          count={jobs.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={jobs.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      )}
     </Dashboard>
   );
 }
