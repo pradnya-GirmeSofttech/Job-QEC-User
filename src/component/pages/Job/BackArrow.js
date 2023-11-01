@@ -1,7 +1,7 @@
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
+
 import { IconButton } from "@mui/material";
 
 export const ArrowBack = () => {

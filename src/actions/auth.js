@@ -181,10 +181,6 @@ export const userProfile = createAsyncThunk("auth/userProfile", async () => {
   try {
     const response = await axios.get(`${url}/me`);
     const user = response.data;
-
-    // You can also log the user here to verify the data
-    console.log("user", user);
-
     return user;
   } catch (err) {
     // Handle any errors, if necessary

@@ -27,8 +27,6 @@ export const createJob = createAsyncThunk(
         dragNo,
         processTable,
       });
-      console.log("res", response.data);
-
       const job = response.data.jobs;
 
       return job;

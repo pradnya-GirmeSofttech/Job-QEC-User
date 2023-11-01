@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -15,8 +15,6 @@ import {
 import logo from "../../../utils/logo.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { changePassword } from "../../../actions/auth";
-import { logout } from "../../../actions/auth";
-import { Link } from "react-router-dom";
 function ResetPassword() {
   const dispatch = useDispatch();
 
@@ -55,7 +53,7 @@ function ResetPassword() {
         newPassword: formData.newPassword,
       })
     );
-    console.log("pass", formData.currentPassword, formData.newPassword);
+
     navigate("/dashboard");
   };
 
@@ -67,10 +65,7 @@ function ResetPassword() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const logoutHandler = () => {
-    dispatch(logout());
-    // alert.success("Logged out successfully.");
-  };
+
   return (
     <>
       <Toolbar sx={{ margin: 3 }}>

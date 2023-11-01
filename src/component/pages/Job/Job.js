@@ -21,20 +21,15 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteJob,
-  generatePDF,
-  getAllJob,
-  getSingleJob,
-} from "../../../actions/job";
+import { deleteJob, generatePDF, getAllJob } from "../../../actions/job";
 import { useDispatch, useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Loader from "../../loader/Loader";
 
 function Job() {
   const navigation = useNavigate();
   const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.job.jobs);
-  console.log(jobs);
+  const { jobs, loading } = useSelector((state) => state.job);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null); // Anchor element for the menu
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -74,6 +69,21 @@ function Job() {
     navigation(`/dashboard/job/updatejob/${id}`);
   };
 
+  const [open, setOpen] = React.useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleClose = () => {
+    setSelectedId(null);
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    if (selectedId) {
+      // Check if a job ID is selected
+      dispatch(deleteJob(selectedId)); // Dispatch the delete action with the selected job ID
+      handleClose(); // Close the modal after deletion
+    }
+  };
   const token = localStorage.getItem("authToken");
   useEffect(() => {
     if (token && isAuthenticated) {
@@ -86,90 +96,156 @@ function Job() {
     setSearchQuery(event.target.value); // Update the search query state
   };
 
-  // const downloadPDF = (id) => {
-  //   dispatch(generatePDF(id));
-  //   console.log("id", id);
-  // };
+  const downloadPDF = (id) => {
+    dispatch(generatePDF(id));
+    console.log("id", id);
+  };
 
   // Filter jobs based on job name or SO/WO number
-  const filteredJobs = jobs?.filter((job) => {
-    const jobNameMatch = job?.jobName?.toLowerCase().includes(searchQuery);
-    const soWoMatch = job?.soWo.toString().includes(searchQuery);
-    return jobNameMatch || soWoMatch;
-  });
+  const filteredJobs = jobs
+    ? jobs.filter((job) => {
+        // Check if the job object and its properties are defined
+        if (job && job.jobName && job.soWo) {
+          const jobNameMatch = job.jobName.toLowerCase().includes(searchQuery);
+          const soWoMatch = job.soWo.toString().includes(searchQuery);
+          return jobNameMatch || soWoMatch;
+        }
+        // Handle cases where job or its properties are undefined
+        return false;
+      })
+    : [];
 
   return (
     <Dashboard>
-      <Box>
-        <Container sx={{ display: "flex", justifyContent: "space-between" }}>
-          <h3>Jobs</h3>
-          <Box>
-            <TextField
-              label="Search"
-              id="outlined-size-small"
-              size="small"
-              onChange={handleSearch}
-            />
-          </Box>
-        </Container>
-        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>SO/WO No</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Total CT</TableCell>
-                <TableCell>Actual CT</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredJobs?.slice(startIndex, endIndex).map((job) => (
-                <TableRow key={job._id}>
-                  <TableCell>{job.soWo}</TableCell>
-                  <TableCell>{job.jobName}</TableCell>
-                  <TableCell>{job.estimatedtotalCT}</TableCell>
-                  <TableCell>{job.actualtotalCT}</TableCell>
-
-                  <TableCell>
-                    <IconButton
-                      aria-label="more"
-                      aria-controls={`job-options-${job._id}`}
-                      aria-haspopup="true"
-                      onClick={(event) => handleMenuOpen(event, job._id)}
-                    >
-                      <MoreHorizIcon />
-                    </IconButton>
-                    <Menu
-                      id={`job-options-${job._id}`}
-                      anchorEl={anchorEl}
-                      open={openMenuId === job._id}
-                      onClose={handleMenuClose}
-                    >
-                      <MenuItem onClick={() => handleEdit(job._id)}>
-                        Edit
-                      </MenuItem>
-                      <MenuItem onClick={() => handleView(job._id)}>
-                        View
-                      </MenuItem>
-                    </Menu>
-                  </TableCell>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Box>
+          <Container sx={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>Jobs</h3>
+            <Box>
+              <TextField
+                label="Search"
+                id="outlined-size-small"
+                size="small"
+                onChange={handleSearch}
+              />
+            </Box>
+          </Container>
+          <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>SO/WO No</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Total CT</TableCell>
+                  <TableCell>Actual CT</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {filteredJobs?.slice(startIndex, endIndex).map((job) => (
+                  <TableRow key={job._id}>
+                    <TableCell>{job.soWo}</TableCell>
+                    <TableCell>{job.jobName}</TableCell>
+                    <TableCell>{job.estimatedtotalCT}</TableCell>
+                    <TableCell>{job?.actualtotalCT}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="more"
+                        aria-controls={`job-options-${job._id}`}
+                        aria-haspopup="true"
+                        onClick={(event) => handleMenuOpen(event, job._id)}
+                      >
+                        <MoreHorizIcon />
+                      </IconButton>
+                      <Menu
+                        id={`job-options-${job._id}`}
+                        anchorEl={anchorEl}
+                        open={openMenuId === job._id}
+                        onClose={handleMenuClose}
+                      >
+                        <MenuItem onClick={() => handleEdit(job._id)}>
+                          Edit
+                        </MenuItem>
+                        <MenuItem onClick={() => handleView(job._id)}>
+                          View
+                        </MenuItem>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          component="div"
-          count={jobs.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
+                        <MenuItem onClick={() => downloadPDF(job._id)}>
+                          Download PDF
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 500,
+                bgcolor: "background.paper",
+                borderRadius: 5,
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Remove Job
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Are you sure you want to remove this Job?
+              </Typography>
+              <Divider sx={{ my: 2, width: "100%" }} />
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  sx={{
+                    backgroundColor: "#eb0e14",
+                    color: "#fff",
+                  }}
+                  onClick={handleDelete}
+                >
+                  Confirm
+                </Button>
+                <Button
+                  sx={{
+                    backgroundColor: "#e5e7eb",
+                    color: "black",
+                    marginLeft: 3,
+                  }}
+                  onClick={handleClose}
+                >
+                  Cancle
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={jobs.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      )}
     </Dashboard>
   );
 }
