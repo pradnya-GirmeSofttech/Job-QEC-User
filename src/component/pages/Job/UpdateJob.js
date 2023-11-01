@@ -20,10 +20,12 @@ import { editJob, getSingleJob } from "../../../actions/job";
 import { ArrowBack } from "./BackArrow";
 import { formattedEditDate } from "./formattedDate";
 import Loader from "../../loader/Loader";
+import Loader from "../../loader/Loader";
 
 function UpdateJob() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const { loading } = useSelector((state) => state.job);
   const { loading } = useSelector((state) => state.job);
   const navigate = useNavigate();
   const [containers, setContainers] = useState([
@@ -444,6 +446,18 @@ function UpdateJob() {
             </TableContainer>
           ))}
 
+          <Button
+            color="primary"
+            sx={{
+              backgroundColor: "#1d5393",
+              color: "#fff",
+            }}
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
+        </>
+      )}
           <Button
             color="primary"
             sx={{

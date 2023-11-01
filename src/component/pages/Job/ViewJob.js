@@ -23,6 +23,7 @@ function ViewJob() {
 
   const dispatch = useDispatch();
   const { jobs, loading } = useSelector((state) => state.job);
+  const { jobs, loading } = useSelector((state) => state.job);
 
   useEffect(() => {
     dispatch(getSingleJob(id));

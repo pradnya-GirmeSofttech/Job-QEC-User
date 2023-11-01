@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Container,
-  Typography,
   TextField,
   TableContainer,
   Paper,
@@ -17,8 +16,6 @@ import {
   MenuItem,
   TableRow,
   TablePagination,
-  Modal,
-  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { deleteJob, generatePDF, getAllJob } from "../../../actions/job";
@@ -29,6 +26,7 @@ import Loader from "../../loader/Loader";
 function Job() {
   const navigation = useNavigate();
   const dispatch = useDispatch();
+  const { jobs, loading } = useSelector((state) => state.job);
   const { jobs, loading } = useSelector((state) => state.job);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null); // Anchor element for the menu

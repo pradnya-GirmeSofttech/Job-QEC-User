@@ -64,20 +64,32 @@ const Dashboard = ({ children }) => {
       location.pathname.startsWith("/dashboard/job")
     ) {
       return "selected-item ";
+    } else {
+      return "list-item ";
     }
   };
 
-  const logoutHandler = () => {
-    dispatch(logout())
-      .then((resultAction) => {
-        if (logout.fulfilled.match(resultAction)) {
-          // Logout was successful, navigate to the login page
-          window.location = "/"; // You can use any navigation method you prefer
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    async function fetchData() {
+      try {
+        if (token && !user) {
+          await dispatch(userProfile(token));
         }
-      })
-      .catch((errorAction) => {
-        console.log("error", errorAction);
-      });
+      } catch (error) {
+        console.error("Error while fetching user data:", error);
+      }
+    }
+
+    fetchData();
+  }, [dispatch, user]);
+
+  // const logoutHandler = () => {
+  //   dispatch(logout());
+  //   // alert.success("Logged out successfully.");
+  // };
+  const handleUserModal = () => {
+    setIsModalOpen(true);
   };
 
   const drawer = (
