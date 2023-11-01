@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CssBaseline,
   Drawer,
@@ -74,7 +74,7 @@ const Dashboard = ({ children }) => {
     async function fetchData() {
       try {
         if (token && !user) {
-          await dispatch(userProfile(token));
+          // await dispatch(userProfile(token));
         }
       } catch (error) {
         console.error("Error while fetching user data:", error);
@@ -88,9 +88,6 @@ const Dashboard = ({ children }) => {
   //   dispatch(logout());
   //   // alert.success("Logged out successfully.");
   // };
-  const handleUserModal = () => {
-    setIsModalOpen(true);
-  };
 
   const drawer = (
     <Grid
@@ -173,7 +170,7 @@ const Dashboard = ({ children }) => {
               variant="outlined"
               component={Link}
               to="/"
-              onClick={logoutHandler}
+              // onClick={logoutHandler}
             >
               Logout
             </Button>

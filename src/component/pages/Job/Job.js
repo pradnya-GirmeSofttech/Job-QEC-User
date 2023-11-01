@@ -27,7 +27,7 @@ function Job() {
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { jobs, loading } = useSelector((state) => state.job);
-  const { jobs, loading } = useSelector((state) => state.job);
+
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = useState(null); // Anchor element for the menu
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -180,59 +180,7 @@ function Job() {
               </TableBody>
             </Table>
           </TableContainer>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 500,
-                bgcolor: "background.paper",
-                borderRadius: 5,
-                boxShadow: 24,
-                p: 4,
-              }}
-            >
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Remove Job
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Are you sure you want to remove this Job?
-              </Typography>
-              <Divider sx={{ my: 2, width: "100%" }} />
-              <Box
-                sx={{
-                  width: "100%",
-                }}
-              >
-                <Button
-                  sx={{
-                    backgroundColor: "#eb0e14",
-                    color: "#fff",
-                  }}
-                  onClick={handleDelete}
-                >
-                  Confirm
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#e5e7eb",
-                    color: "black",
-                    marginLeft: 3,
-                  }}
-                  onClick={handleClose}
-                >
-                  Cancle
-                </Button>
-              </Box>
-            </Box>
-          </Modal>
+
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50]}
             component="div"
