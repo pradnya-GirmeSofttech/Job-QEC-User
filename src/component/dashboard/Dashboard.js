@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CssBaseline,
   Drawer,
   AppBar,
   Toolbar,
   List,
-  Grid,
   ListItem,
   ListItemText,
   Button,
-  Divider,
   ListItemIcon,
   Box,
   IconButton,
@@ -29,6 +27,7 @@ import { logout } from "../../actions/auth";
 const drawerWidth = 240;
 const Dashboard = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -37,24 +36,6 @@ const Dashboard = ({ children }) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
-  //   async function fetchData() {
-  //     try {
-  //       if (token && !user) {
-  //         await dispatch(userProfile(token));
-  //       }
-  //     } catch (error) {
-  //       console.error("Error while fetching user data:", error);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, [dispatch, user]);
-
-  // const listItemStyle = (path) => {
-  //   return location.pathname === path ? "selected-item " : "list-item ";
-  // };
 
   const listItemStyle = (path) => {
     if (location.pathname === path) {
@@ -64,84 +45,72 @@ const Dashboard = ({ children }) => {
       location.pathname.startsWith("/dashboard/job")
     ) {
       return "selected-item ";
+    } else if (
+      path === "/dashboard/user" &&
+      location.pathname.startsWith("/dashboard/user")
+    ) {
+      return "selected-item ";
     } else {
       return "list-item ";
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    async function fetchData() {
-      try {
-        if (token && !user) {
-          // await dispatch(userProfile(token));
+  const handleUserModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const logoutHandler = () => {
+    dispatch(logout())
+      .then((resultAction) => {
+        if (logout.fulfilled.match(resultAction)) {
+          // Logout was successful, navigate to the login page
+          window.location = "/"; // You can use any navigation method you prefer
         }
-      } catch (error) {
-        console.error("Error while fetching user data:", error);
-      }
-    }
-
-    fetchData();
-  }, [dispatch, user]);
-
-  // const logoutHandler = () => {
-  //   dispatch(logout());
-  //   // alert.success("Logged out successfully.");
-  // };
+      })
+      .catch((errorAction) => {
+        console.log("error", errorAction);
+      });
+  };
 
   const drawer = (
-    <Grid
-      container
-      direction="column"
-      justifyContent="space-between"
-      height="100%"
-    >
-      <Grid item>
-        <Toolbar sx={{ marginTop: 3 }}>
-          <img src={logo} alt="logo" className="logo" />
-        </Toolbar>
-        <List sx={{ marginTop: 4 }}>
-          <ListItem
-            component={Link}
-            to="/dashboard"
-            className={listItemStyle("/dashboard")}
+    <div>
+      <Toolbar sx={{ marginTop: 3 }}>
+        <img src={logo} alt="logo" className="logo" />
+      </Toolbar>
+      {/* <Divider /> */}
+      <List sx={{ marginTop: 4 }}>
+        <ListItem
+          component={Link}
+          to="/dashboard"
+          className={listItemStyle("/dashboard")}
+        >
+          <ListItemIcon
+            sx={{
+              color: location.pathname === "/dashboard" ? "white" : "#1D5393",
+            }}
           >
-            <ListItemIcon>
-              <HomeIcon
-                sx={{
-                  color:
-                    location.pathname === "/dashboard" ? "white" : "#1D5393",
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem
-            component={Link}
-            to="/dashboard/job"
-            className={listItemStyle("/dashboard/job")}
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem
+          component={Link}
+          to="/dashboard/job"
+          className={listItemStyle("/dashboard/job")}
+        >
+          <ListItemIcon
+            sx={{
+              color: location.pathname.startsWith("/dashboard/job")
+                ? "white"
+                : "#1D5393",
+            }}
           >
-            <ListItemIcon>
-              <WorkIcon
-                sx={{
-                  color:
-                    location.pathname === "/dashboard/job"
-                      ? "white"
-                      : "#1D5393",
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText primary="Job" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid container justifyContent="center" item sx={{ my: 2 }}>
-        <Divider width="100%" sx={{ my: 2 }} />
-        <Button variant="outlined" component={Link} to="/reset-password">
-          Reset Password
-        </Button>
-      </Grid>
-    </Grid>
+            <WorkIcon />
+          </ListItemIcon>
+          <ListItemText primary="Job" />
+        </ListItem>
+      </List>
+    </div>
   );
 
   return (
@@ -170,7 +139,7 @@ const Dashboard = ({ children }) => {
               variant="outlined"
               component={Link}
               to="/"
-              // onClick={logoutHandler}
+              onClick={logoutHandler}
             >
               Logout
             </Button>
@@ -179,6 +148,7 @@ const Dashboard = ({ children }) => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
+              onClick={handleUserModal}
               // disabled
               color="primary"
             >
@@ -187,7 +157,13 @@ const Dashboard = ({ children }) => {
           </div>
         </Toolbar>
       </AppBar>
-
+      {isModalOpen && (
+        <UseProfileModal
+          user={user}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

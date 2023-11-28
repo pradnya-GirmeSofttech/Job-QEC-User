@@ -9,7 +9,7 @@ import ResetPassword from "./component/pages/resetPassword/ResetPassword";
 import ViewJob from "./component/pages/Job/ViewJob";
 import UpdateJob from "./component/pages/Job/UpdateJob";
 import { userProfile } from "./actions/auth";
-
+import Page404 from "./component/pageNotFound/page404";
 function App() {
   const dispatch = useDispatch();
 
@@ -22,7 +22,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />}></Route>
         <Route path="/dashboard" element={<Home />}></Route>
-
+        <Route path="404" element={<Page404 />} />
+        <Route path="*" element={<Page404 />} />
         <Route path="/dashboard/job" element={<Job />}></Route>
 
         <Route path="/dashboard/job/viewjob/:id" element={<ViewJob />}></Route>
