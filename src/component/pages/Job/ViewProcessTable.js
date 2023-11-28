@@ -423,7 +423,6 @@ export const ViewProcessTable = ({
                 </TableCell>
                 <TableCell align="center">{row.endTime1}</TableCell>
                 <TableCell align="center">{row.userName}</TableCell>
-                <TableCell align="center"></TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -554,7 +553,6 @@ export const ViewProcessTable = ({
                 </TableCell>
                 <TableCell align="center">{row.endTime1}</TableCell>
                 <TableCell align="center">{row.userName}</TableCell>
-                <TableCell align="center"></TableCell>
               </TableRow>
             ))}
         </TableBody>
