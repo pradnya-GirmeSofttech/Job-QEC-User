@@ -55,11 +55,15 @@ function ViewJob() {
                   <TableCell>PO No</TableCell>
                   <TableCell>{jobs[0]?.poNo}</TableCell>
                   <TableCell>Total CT</TableCell>
-                  <TableCell>{jobs[0]?.totalCT}</TableCell>
+                  <TableCell align="center">
+                    {jobs[0]?.estimatedtotalCT}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Drag No</TableCell>
                   <TableCell>{jobs[0]?.dragNo}</TableCell>
+                  <TableCell>Actual Total CT</TableCell>
+                  <TableCell align="center">{jobs[0]?.actualtotalCT}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

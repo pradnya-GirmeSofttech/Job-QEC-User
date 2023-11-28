@@ -16,9 +16,12 @@ import {
   MenuItem,
   TableRow,
   TablePagination,
+  InputBase,
+  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { deleteJob, generatePDF, getAllJob } from "../../../actions/job";
+import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch, useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Loader from "../../loader/Loader";
@@ -112,6 +115,7 @@ function Job() {
         return false;
       })
     : [];
+  const noJobsAvailable = filteredJobs.length === 0;
 
   return (
     <Dashboard>
@@ -120,76 +124,122 @@ function Job() {
       ) : (
         <Box>
           <Container sx={{ display: "flex", justifyContent: "space-between" }}>
-            <h3>Jobs</h3>
-            <Box>
-              <TextField
-                label="Search"
-                id="outlined-size-small"
-                size="small"
-                onChange={handleSearch}
-              />
+            <Typography variant="h5" gutterBottom>
+              Jobs
+            </Typography>
+            <Box sx={{ display: "flex" }}>
+              <Paper
+                component="form"
+                sx={{
+                  display: "flex",
+                  height: "70%",
+                }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="Search"
+                  inputProps={{ "aria-label": "search google maps" }}
+                  onChange={handleSearch}
+                  size="small"
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
             </Box>
           </Container>
-          <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>SO/WO No</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Total CT</TableCell>
-                  <TableCell>Actual CT</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredJobs?.slice(startIndex, endIndex).map((job) => (
-                  <TableRow key={job._id}>
-                    <TableCell>{job.soWo}</TableCell>
-                    <TableCell>{job.jobName}</TableCell>
-                    <TableCell>{job.estimatedtotalCT}</TableCell>
-                    <TableCell>{job?.actualtotalCT}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="more"
-                        aria-controls={`job-options-${job._id}`}
-                        aria-haspopup="true"
-                        onClick={(event) => handleMenuOpen(event, job._id)}
-                      >
-                        <MoreHorizIcon />
-                      </IconButton>
-                      <Menu
-                        id={`job-options-${job._id}`}
-                        anchorEl={anchorEl}
-                        open={openMenuId === job._id}
-                        onClose={handleMenuClose}
-                      >
-                        <MenuItem onClick={() => handleEdit(job._id)}>
-                          Edit
-                        </MenuItem>
-                        <MenuItem onClick={() => handleView(job._id)}>
-                          View
-                        </MenuItem>
+          {noJobsAvailable ? (
+            <Paper
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: 2, // Add padding to create a card-like appearance
+                boxShadow: 2,
+                marginTop: 20, // Add a shadow for a raised effect
+              }}
+            >
+              <Typography variant="body1">No jobs available</Typography>
+            </Paper>
+          ) : (
+            <>
+              <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+                <Table sx={{ minWidth: 650 }}>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#1D5393" }}>
+                      <TableCell sx={{ color: "#fff" }}>SO/WO No</TableCell>
+                      <TableCell sx={{ color: "#fff" }}>Name</TableCell>
+                      <TableCell sx={{ color: "#fff" }}>Total CT</TableCell>
+                      <TableCell sx={{ color: "#fff" }}>Actual CT</TableCell>
+                      <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredJobs?.slice(startIndex, endIndex).map((job) => (
+                      <TableRow
+                        key={job._id}
+                        style={{
+                          color: "#fff",
 
-                        <MenuItem onClick={() => downloadPDF(job._id)}>
-                          Download PDF
-                        </MenuItem>
-                      </Menu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                          backgroundColor:
+                            job.estimatedtotalCT >= job?.actualtotalCT ||
+                            job.estimatedtotalCT >= job?.actualtotalCT
+                              ? "#78cc9f"
+                              : "#c34266",
+                        }}
+                      >
+                        <TableCell>{job.soWo}</TableCell>
+                        <TableCell>{job.jobName}</TableCell>
+                        <TableCell>{job.estimatedtotalCT}</TableCell>
+                        <TableCell>{job?.actualtotalCT}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="more"
+                            aria-controls={`job-options-${job._id}`}
+                            aria-haspopup="true"
+                            onClick={(event) => handleMenuOpen(event, job._id)}
+                          >
+                            <MoreHorizIcon />
+                          </IconButton>
+                          <Menu
+                            id={`job-options-${job._id}`}
+                            anchorEl={anchorEl}
+                            open={openMenuId === job._id}
+                            onClose={handleMenuClose}
+                          >
+                            <MenuItem onClick={() => handleEdit(job._id)}>
+                              Edit
+                            </MenuItem>
+                            <MenuItem onClick={() => handleView(job._id)}>
+                              View
+                            </MenuItem>
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            component="div"
-            count={jobs.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+                            <MenuItem onClick={() => downloadPDF(job._id)}>
+                              Download PDF
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                component="div"
+                count={jobs.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </>
+          )}
         </Box>
       )}
     </Dashboard>

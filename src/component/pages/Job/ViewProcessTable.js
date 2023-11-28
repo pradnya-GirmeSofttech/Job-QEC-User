@@ -109,7 +109,14 @@ export const ViewProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    row.actualCT >= row.estimatedCT ? "#78cc9f" : "#c34266",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">{row.process}</TableCell>
@@ -242,7 +249,14 @@ export const ViewProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    row.actualCT >= row.estimatedCT ? "#78cc9f" : "#c34266",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">{row.process}</TableCell>
@@ -369,7 +383,14 @@ export const ViewProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    row.actualCT >= row.estimatedCT ? "#78cc9f" : "#c34266",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
                 <TableCell align="center">{row.process}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
@@ -492,7 +513,14 @@ export const ViewProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    row.actualCT >= row.estimatedCT ? "#78cc9f" : "#c34266",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">{row.process}</TableCell>

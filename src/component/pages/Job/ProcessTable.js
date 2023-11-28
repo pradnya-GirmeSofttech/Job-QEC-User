@@ -67,7 +67,18 @@ export const ProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    !isNaN(row.estimatedCT) && row.estimatedCT !== 0
+                      ? row.actualCT >= row.estimatedCT
+                        ? "#78cc9f"
+                        : "#c34266"
+                      : "inherit",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">
@@ -778,7 +789,18 @@ export const ProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    !isNaN(row.estimatedCT) && row.estimatedCT !== 0
+                      ? row.actualCT >= row.estimatedCT
+                        ? "#78cc9f"
+                        : "#c34266"
+                      : "inherit",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">
@@ -1444,7 +1466,18 @@ export const ProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    !isNaN(row.estimatedCT) && row.estimatedCT !== 0
+                      ? row.actualCT >= row.estimatedCT
+                        ? "#78cc9f"
+                        : "#c34266"
+                      : "inherit",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
 
                 <TableCell align="center">
@@ -1728,7 +1761,6 @@ export const ProcessTable = ({
                     type="date"
                     name={`startDate-${rowIndex}`}
                     value={formattedEditDate(row.startDate)}
-                    disabled
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1754,7 +1786,6 @@ export const ProcessTable = ({
                     type="time"
                     name={`startTime-${rowIndex}`}
                     value={row.startTime}
-                    disabled
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1777,7 +1808,6 @@ export const ProcessTable = ({
                     name={`endDate-${rowIndex}`}
                     className="fixed-width-input"
                     value={formattedEditDate(row.endDate)}
-                    disabled
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1803,7 +1833,6 @@ export const ProcessTable = ({
                     name={`endTime-${rowIndex}`}
                     className="fixed-width-input"
                     value={row.endTime}
-                    disabled
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1826,7 +1855,6 @@ export const ProcessTable = ({
                     value={row.idleCode}
                     name={`idleCode-${rowIndex}`}
                     className="fixed-width-input"
-                    disabled
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -2037,7 +2065,18 @@ export const ProcessTable = ({
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    !isNaN(row.estimatedCT) && row.estimatedCT !== 0
+                      ? row.actualCT >= row.estimatedCT
+                        ? "#78cc9f"
+                        : "#c34266"
+                      : "inherit",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
                 <TableCell align="center"></TableCell>
                 <TableCell align="center">
