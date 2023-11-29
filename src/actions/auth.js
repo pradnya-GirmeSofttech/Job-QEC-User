@@ -1,15 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../utils/api";
-import { url } from "../utils/api";
-const token = localStorage.getItem("authToken");
+import { api } from "../utils/api";
+
 // Register
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async ({ name, email, password, role }, { rejectWithValue }) => {
     try {
       const config = { headers: { "Content-Type": "application/json" } };
-      const response = await axios.post(
-        `${url}/register`,
+      const response = await api.post(
+        `/register`,
         {
           name,
           email,
@@ -35,23 +34,28 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const config = { headers: { "Content-Type": "application/json" } };
-      const response = await axios.post(
-        `${url}/login`,
-        {
-          email,
-          password,
-        },
-        config
+      const response = await api.post("/login", {
+        email: email,
+        password: password,
+      });
+
+      // Assuming your API returns a token on successful login
+      const token = response.data.token;
+      const userData = response.data.user;
+      // Save the token to local storage
+      localStorage.setItem("token", token);
+
+      return { success: true, token: token, user: userData };
+    } catch (error) {
+      // Handle login failure
+      console.error(
+        "Login failed:",
+        error.response ? error.response.data : error.message
       );
-
-      const user = response.data;
-      localStorage.setItem("authToken", user.token);
-
-      return user;
-    } catch (err) {
-      console.error("Error", err.response.data);
-      return rejectWithValue(err.response.data);
+      return {
+        success: false,
+        error: error.response ? error.response.data : error.message,
+      };
     }
   }
 );
@@ -61,7 +65,7 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      await axios.get(`${url}/logout`);
+      await api.get(`/logout`);
       localStorage.removeItem("authToken");
       return null;
     } catch (error) {
@@ -78,8 +82,8 @@ export const loginNewUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const config = { headers: { "Content-Type": "application/json" } };
-      const response = await axios.post(
-        `${url}/login`,
+      const response = await api.post(
+        `/login`,
         {
           email,
           password,
@@ -103,7 +107,7 @@ export const deleteUser = createAsyncThunk(
   "auth/deleteUser",
   async (userId, { rejectWithValue }) => {
     try {
-      await axios.delete(`${url}/deleteuser/${userId}`);
+      await api.delete(`/deleteuser/${userId}`);
       return userId;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -116,7 +120,7 @@ export const fetchUsersWithUserRole = createAsyncThunk(
   "auth/fetchUsersWithUserRole",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${url}/users`); // Adjust the API endpoint as needed
+      const response = await fetch(`/users`); // Adjust the API endpoint as needed
       if (!response.ok) {
         throw new Error("Request failed");
       }
@@ -136,10 +140,7 @@ export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async ({ editedUser }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `${url}/edituser/${editedUser.id}`,
-        editedUser
-      );
+      const response = await api.put(`/edituser/${editedUser.id}`, editedUser);
       // Log the response
       return response.data; // Return updated user data if successful
     } catch (error) {
@@ -160,8 +161,8 @@ export const changePassword = createAsyncThunk(
       const headers = {
         Authorization: ` ${token}`, // Include the token in the "Authorization" header
       };
-      const response = await axios.put(
-        `${url}/updatepassword`,
+      const response = await api.put(
+        `/updatepassword`,
         {
           oldPassword,
           newPassword,
@@ -179,8 +180,9 @@ export const changePassword = createAsyncThunk(
 // Profile of user
 export const userProfile = createAsyncThunk("auth/userProfile", async () => {
   try {
-    const response = await axios.get(`${url}/me`);
+    const response = await api.get(`/me`);
     const user = response.data;
+    console.log(response);
     return user;
   } catch (err) {
     // Handle any errors, if necessary

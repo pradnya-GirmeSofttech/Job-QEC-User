@@ -2078,7 +2078,7 @@ export const ProcessTable = ({
                 }}
               >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
-                <TableCell align="center"></TableCell>
+
                 <TableCell align="center">
                   <Select
                     labelId={`process-label-${rowIndex}`}

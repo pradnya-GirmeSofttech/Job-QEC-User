@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../utils/api";
-import { url } from "../utils/api";
+import { api } from "../utils/api";
 
 export const createJob = createAsyncThunk(
   "jobs/createJob",
@@ -16,7 +15,7 @@ export const createJob = createAsyncThunk(
     processTable,
   }) => {
     try {
-      const response = await axios.post(`${url}/createjob`, {
+      const response = await api.post(`/createjob`, {
         soWo,
         prodOrderNo,
         woDate,
@@ -39,7 +38,7 @@ export const createJob = createAsyncThunk(
 
 export const getAllJob = createAsyncThunk("jobs/getAllJob", async () => {
   try {
-    const response = await axios.get(`${url}/jobs`);
+    const response = await api.get(`/jobs`);
     const job = response.data.jobs;
 
     return job;
@@ -53,7 +52,7 @@ export const getSingleJob = createAsyncThunk(
   "jobs/getSingleJob",
   async (id) => {
     try {
-      const response = await axios.get(`${url}/viewjob/${id}`);
+      const response = await api.get(`/viewjob/${id}`);
       const job = response.data.job;
 
       return job;
@@ -66,7 +65,7 @@ export const getSingleJob = createAsyncThunk(
 
 export const deleteJob = createAsyncThunk("jobs/deleteJob", async (id) => {
   try {
-    const response = await axios.delete(`${url}/deletejob/${id}`);
+    const response = await api.delete(`/deletejob/${id}`);
     console.log("res", response.data);
     return id;
   } catch (err) {
@@ -79,8 +78,8 @@ export const editJob = createAsyncThunk(
   "jobs/editJob",
   async (editFormData) => {
     try {
-      const response = await axios.put(
-        `${url}/updatejob/${editFormData.id}`,
+      const response = await api.put(
+        `/updatejob/${editFormData.id}`,
         editFormData.formData
       );
       console.log("res", response.data);
@@ -100,8 +99,8 @@ export const editJob = createAsyncThunk(
 
 export const generatePDF = createAsyncThunk("jobs/generatePDF", (id) => {
   try {
-    axios
-      .get(`${url}/generatePdf/${id}`, {
+    api
+      .get(`/generatePdf/${id}`, {
         responseType: "blob",
       })
       .then((response) => {
