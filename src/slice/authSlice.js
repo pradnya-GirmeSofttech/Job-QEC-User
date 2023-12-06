@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
+  token: null,
   isAuthenticated: false,
   passwordChangeStatus: {
     success: false,
@@ -26,9 +27,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
         state.error = null;
         state.isAuthenticated = true;
+        state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

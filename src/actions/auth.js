@@ -77,30 +77,30 @@ export const logout = createAsyncThunk(
 );
 
 // Registration of new user
-export const loginNewUser = createAsyncThunk(
-  "auth/loginNewUser",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const config = { headers: { "Content-Type": "application/json" } };
-      const response = await api.post(
-        `/login`,
-        {
-          email,
-          password,
-        },
-        config
-      );
+// export const loginNewUser = createAsyncThunk(
+//   "auth/loginNewUser",
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const config = { headers: { "Content-Type": "application/json" } };
+//       const response = await api.post(
+//         `/login`,
+//         {
+//           email,
+//           password,
+//         },
+//         config
+//       );
 
-      const user = response.data;
-      localStorage.setItem("authToken", user.token);
+//       const user = response.data;
+//       localStorage.setItem("authToken", user.token);
 
-      return user;
-    } catch (err) {
-      console.error("Error", err.response.data);
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
+//       return user;
+//     } catch (err) {
+//       console.error("Error", err.response.data);
+//       return rejectWithValue(err.response.data);
+//     }
+//   }
+// );
 
 // Delete user
 export const deleteUser = createAsyncThunk(
@@ -181,8 +181,9 @@ export const changePassword = createAsyncThunk(
 export const userProfile = createAsyncThunk("auth/userProfile", async () => {
   try {
     const response = await api.get(`/me`);
+    console.log("response", response);
     const user = response.data;
-    console.log(response);
+
     return user;
   } catch (err) {
     // Handle any errors, if necessary
