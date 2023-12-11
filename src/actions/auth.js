@@ -34,10 +34,14 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/login", {
-        email: email,
-        password: password,
-      });
+      const response = await api.post(
+        "/login",
+        {
+          email: email,
+          password: password,
+        },
+        { headers: { "X-User-Side": "true" } }
+      );
 
       // Assuming your API returns a token on successful login
       const token = response.data.token;
@@ -48,14 +52,15 @@ export const loginUser = createAsyncThunk(
       return { success: true, token: token, user: userData };
     } catch (error) {
       // Handle login failure
-      console.error(
-        "Login failed:",
-        error.response ? error.response.data : error.message
-      );
-      return {
+      console.error(error.message);
+      // return {
+      //   success: false,
+      //   error: error.response ? error.response.data : error.message,
+      // };
+      return rejectWithValue({
         success: false,
         error: error.response ? error.response.data : error.message,
-      };
+      });
     }
   }
 );

@@ -35,7 +35,7 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        state.error = action.payload;
+        state.error = action.payload.error;
         state.isAuthenticated = false;
       })
       .addCase(changePassword.pending, (state, action) => {
