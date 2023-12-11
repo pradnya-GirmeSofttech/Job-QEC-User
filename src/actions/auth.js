@@ -43,7 +43,7 @@ export const loginUser = createAsyncThunk(
       const token = response.data.token;
       const userData = response.data.user;
       // Save the token to local storage
-      localStorage.setItem("token", token);
+      localStorage.setItem("Job_Qec_User", token);
 
       return { success: true, token: token, user: userData };
     } catch (error) {
@@ -66,7 +66,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await api.get(`/logout`);
-      localStorage.removeItem("token");
+      localStorage.removeItem("Job_Qec_User");
       return null;
     } catch (error) {
       console.error("Logout error:", error);
@@ -181,6 +181,7 @@ export const changePassword = createAsyncThunk(
 export const userProfile = createAsyncThunk("auth/userProfile", async () => {
   try {
     const response = await api.get(`/me`);
+
     console.log("response", response);
     const user = response.data;
 

@@ -14,7 +14,7 @@ export const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
-      const token = await localStorage.getItem("token");
+      const token = await localStorage.getItem("Job_Qec_User");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

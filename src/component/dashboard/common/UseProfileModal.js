@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Typography, Button, Box, Divider } from "@mui/material";
-const UseProfileModal = ({ isOpen, onClose, user }) => {
+const UserProfileModal = ({ isOpen, onClose, user }) => {
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
@@ -45,4 +45,4 @@ const UseProfileModal = ({ isOpen, onClose, user }) => {
   );
 };
 
-export default UseProfileModal;
+export default UserProfileModal;

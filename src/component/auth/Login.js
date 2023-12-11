@@ -142,14 +142,10 @@ const Login = () => {
               ),
             }}
           />
-          {formData.showAlert || error?.message === "User already exists" ? (
+          {formData.showAlert || error?.message ? (
             <Alert severity="error" sx={{ marginTop: 2 }}>
               <AlertTitle>Error</AlertTitle>
-              {formData.showAlert
-                ? "Please enter all fields."
-                : error?.message === "Invalid Email or Password"
-                ? "Invalid Email or Password"
-                : ""}
+              {formData.showAlert ? "Please enter all fields." : error?.message}
             </Alert>
           ) : null}
           <Button type="submit" variant="contained" fullWidth>
