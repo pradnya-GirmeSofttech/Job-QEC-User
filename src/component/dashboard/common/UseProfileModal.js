@@ -1,5 +1,13 @@
 import React from "react";
-import { Modal, Typography, Button, Box, Divider } from "@mui/material";
+import {
+  Modal,
+  Typography,
+  Button,
+  Box,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 const UserProfileModal = ({ isOpen, onClose, user }) => {
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -15,6 +23,20 @@ const UserProfileModal = ({ isOpen, onClose, user }) => {
           p: 4,
         }}
       >
+        <IconButton
+          aria-label="close"
+          color="inherit"
+          edge="end"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 10,
+            zIndex: 1,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <Typography
           id="modal-modal-title"
           variant="h5"
