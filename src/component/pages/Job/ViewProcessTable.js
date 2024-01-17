@@ -7,10 +7,12 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
 } from "@mui/material";
 import "./ProcessTable.css";
 
 import ModeStandbyOutlinedIcon from "@mui/icons-material/ModeStandbyOutlined";
+import ClearIcon from "@mui/icons-material/Clear";
 import { formattedDate } from "./formattedDate";
 
 export const ViewProcessTable = ({
@@ -24,85 +26,88 @@ export const ViewProcessTable = ({
 
   const millingTable = (
     <>
-      <Table sx={{ minWidth: 2800, margin: 0.5 }} aria-label="simple table">
-        <TableHead sx={{ backgroundColor: "#00416b" }}>
-          <TableRow>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+      <Table sx={{ minWidth: 2800 }} aria-label="simple table">
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#1D5393" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Sr.No
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Process
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Description
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Machine Name
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Used
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Length
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Width
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               DC
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               MR
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               NOP
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               FPP
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Feed
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               EST.HRS
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Estimated CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Actual CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Ideal Code
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               User Name
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#fff" }}>
+              Remark
             </TableCell>
           </TableRow>
         </TableHead>
@@ -136,21 +141,36 @@ export const ViewProcessTable = ({
                 <TableCell align="center">
                   {formattedDate(row.startDate)}
                 </TableCell>
-                <TableCell align="center">{row.startTime}</TableCell>
+                <TableCell align="center">
+                  {row.startTime ? row.startTime : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate)}
                 </TableCell>
-                <TableCell align="center">{row.endTime}</TableCell>
-                <TableCell align="center">{row.idleCode}</TableCell>
+                <TableCell align="center">
+                  {row.endTime ? row.endTime : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.idleCode ? row.idleCode : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.startDate1)}
                 </TableCell>
-                <TableCell align="center">{row.startTime1}</TableCell>
+                <TableCell align="center">
+                  {row.startTime1 ? row.startTime1 : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate1)}
                 </TableCell>
-                <TableCell align="center">{row.endTime1}</TableCell>
-                <TableCell align="center">{row.userName}</TableCell>
+                <TableCell align="center">
+                  {row.endTime1 ? row.endTime1 : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.userName ? row.userName : "-"}
+                </TableCell>
+                <TableCell align="center" className="cell-width">
+                  {row.remark ? row.remark : "-"}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -160,89 +180,92 @@ export const ViewProcessTable = ({
 
   const boringTable = (
     <>
-      <Table sx={{ minWidth: 2800, margin: 0.5 }} aria-label="simple table">
-        <TableHead sx={{ backgroundColor: "#00416b" }}>
-          <TableRow>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+      <Table sx={{ minWidth: 2800 }} aria-label="simple table">
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#1D5393" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Sr.No
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Process
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Description
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Machine Name
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Used
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Size
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               RPM
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Feed(MM/REV)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Length
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               DC
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               MR
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               NOP
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               FPP
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               EST.HRS
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Estimated CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Actual CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Ideal Code
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               User Name
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#fff" }}>
+              Remark
             </TableCell>
           </TableRow>
         </TableHead>
@@ -278,21 +301,36 @@ export const ViewProcessTable = ({
                 <TableCell align="center">
                   {formattedDate(row.startDate)}
                 </TableCell>
-                <TableCell align="center">{row.startTime}</TableCell>
+                <TableCell align="center">
+                  {row.startTime ? row.startTime : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate)}
                 </TableCell>
-                <TableCell align="center">{row.endTime}</TableCell>
-                <TableCell align="center">{row.idleCode}</TableCell>
+                <TableCell align="center">
+                  {row.endTime ? row.endTime : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.idleCode ? row.idleCode : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.startDate1)}
                 </TableCell>
-                <TableCell align="center">{row.startTime1}</TableCell>
+                <TableCell align="center">
+                  {row.startTime1 ? row.startTime1 : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate1)}
                 </TableCell>
-                <TableCell align="center">{row.endTime1}</TableCell>
-                <TableCell align="center">{row.userName}</TableCell>
+                <TableCell align="center">
+                  {row.endTime1 ? row.endTime1 : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.userName ? row.userName : "-"}
+                </TableCell>
+                <TableCell align="center" className="cell-width">
+                  {row.remark ? row.remark : "-"}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -302,81 +340,84 @@ export const ViewProcessTable = ({
 
   const drillingTable = (
     <>
-      <Table sx={{ minWidth: 2800, margin: 0.5 }} aria-label="simple table">
-        <TableHead sx={{ backgroundColor: "#00416b" }}>
-          <TableRow>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+      <Table sx={{ minWidth: 2800 }} aria-label="simple table">
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#1D5393" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Sr.No
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Process
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Description
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Machine Name
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Used
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               DIA
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               RPM
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Length
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Feed(MM/MIN)
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               NOH
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               EST.HRS
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Estimated CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Actual CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Ideal Code
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               User Name
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#fff" }}>
+              Remark
             </TableCell>
           </TableRow>
         </TableHead>
@@ -392,6 +433,7 @@ export const ViewProcessTable = ({
                 }}
               >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
+
                 <TableCell align="center">{row.process}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
                 <TableCell align="center">{row.machineName}</TableCell>
@@ -408,21 +450,36 @@ export const ViewProcessTable = ({
                 <TableCell align="center">
                   {formattedDate(row.startDate)}
                 </TableCell>
-                <TableCell align="center">{row.startTime}</TableCell>
+                <TableCell align="center">
+                  {row.startTime ? row.startTime : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate)}
                 </TableCell>
-                <TableCell align="center">{row.endTime}</TableCell>
-                <TableCell align="center">{row.idleCode}</TableCell>
+                <TableCell align="center">
+                  {row.endTime ? row.endTime : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.idleCode ? row.idleCode : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.startDate1)}
                 </TableCell>
-                <TableCell align="center">{row.startTime1}</TableCell>
+                <TableCell align="center">
+                  {row.startTime1 ? row.startTime1 : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate1)}
                 </TableCell>
-                <TableCell align="center">{row.endTime1}</TableCell>
-                <TableCell align="center">{row.userName}</TableCell>
+                <TableCell align="center">
+                  {row.endTime1 ? row.endTime1 : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.userName ? row.userName : "-"}
+                </TableCell>
+                <TableCell align="center" className="cell-width">
+                  {row.remark ? row.remark : "-"}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -432,80 +489,83 @@ export const ViewProcessTable = ({
 
   const tappingTable = (
     <>
-      <Table sx={{ minWidth: 2800, margin: 0.5 }} aria-label="simple table">
-        <TableHead sx={{ backgroundColor: "#00416b" }}>
-          <TableRow>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+      <Table sx={{ minWidth: 2800 }} aria-label="simple table">
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#1D5393" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Sr.No
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Process
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Description
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Machine Name
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Used
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               DIA
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               RPM
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Length
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Feed(MM/MIN)
             </TableCell>
 
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               NOH
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               EST.HRS
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Estimated CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Actual CT(min)
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Ideal Code
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               Start Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Date
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               End Time
             </TableCell>
-            <TableCell align="center" sx={{ color: "#ffff" }}>
+            <TableCell align="center" sx={{ color: "#fff" }}>
               User Name
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#fff" }}>
+              Remark
             </TableCell>
           </TableRow>
         </TableHead>
@@ -538,21 +598,36 @@ export const ViewProcessTable = ({
                 <TableCell align="center">
                   {formattedDate(row.startDate)}
                 </TableCell>
-                <TableCell align="center">{row.startTime}</TableCell>
+                <TableCell align="center">
+                  {row.startTime ? row.startTime : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate)}
                 </TableCell>
-                <TableCell align="center">{row.endTime}</TableCell>
-                <TableCell align="center">{row.idleCode}</TableCell>
+                <TableCell align="center">
+                  {row.endTime ? row.endTime : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.idleCode ? row.idleCode : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.startDate1)}
                 </TableCell>
-                <TableCell align="center">{row.startTime1}</TableCell>
+                <TableCell align="center">
+                  {row.startTime1 ? row.startTime1 : "-"}
+                </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.endDate1)}
                 </TableCell>
-                <TableCell align="center">{row.endTime1}</TableCell>
-                <TableCell align="center">{row.userName}</TableCell>
+                <TableCell align="center">
+                  {row.endTime1 ? row.endTime1 : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.userName ? row.userName : "-"}
+                </TableCell>
+                <TableCell align="center" className="cell-width">
+                  {row.remark ? row.remark : "-"}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

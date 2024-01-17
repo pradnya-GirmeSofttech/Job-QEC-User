@@ -11,10 +11,13 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import "./ProcessTable.css";
-
+import Chip from "@mui/material/Chip";
 import { formattedEditDate } from "./formattedDate";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { idleCode, machineData, processList, toolList, userName } from "./Data";
 
 export const ProcessTable = ({
@@ -25,6 +28,29 @@ export const ProcessTable = ({
   selectedProcessName,
 }) => {
   const processTableData = data || [];
+
+  const handleRemoveIdleCode = (
+    valueToRemove,
+    row,
+    index,
+    processName,
+    rowIndex
+  ) => {
+    console.log("Close Icon");
+    // Assuming row.idleCode is an array
+    const updatedIdleCode = row.idleCode.filter(
+      (value) => value !== valueToRemove
+    );
+
+    // Update the state or perform any necessary actions
+    handleTextFieldChange(
+      { target: { value: updatedIdleCode } },
+      rowIndex,
+      "idleCode",
+      index,
+      processName
+    );
+  };
 
   const millingTable = (
     <>
@@ -48,7 +74,7 @@ export const ProcessTable = ({
 
             <TableCell align="center">FPP</TableCell>
 
-            <TableCell align="center">Actual CT(min)</TableCell>
+            <TableCell align="center">Estimated CT(min)</TableCell>
 
             <TableCell align="center">EST.HRS</TableCell>
             <TableCell align="center">Start Date</TableCell>
@@ -60,8 +86,9 @@ export const ProcessTable = ({
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
-            <TableCell align="center">Estimated CT(min)</TableCell>
+            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">User Name</TableCell>
+            <TableCell align="center">Remark</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -88,7 +115,7 @@ export const ProcessTable = ({
                     id={`process-${rowIndex}`}
                     value={row.process}
                     name={`process-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     disabled
                     onChange={(e) =>
                       handleTextFieldChange(
@@ -116,7 +143,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <TextField
                     label="Description"
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     name={`description-${rowIndex}`}
                     value={row.description}
@@ -141,7 +168,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`machineName-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`machineName-${rowIndex}`}
                     value={row.machineName}
@@ -176,7 +203,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`toolingUsed-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`toolingUsed-${rowIndex}`}
                     value={row.toolingUsed} // Ensure that value is an array
@@ -412,7 +439,7 @@ export const ProcessTable = ({
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="actualCT"
+                    label="EstimatedCT"
                     className="fixed-width-input"
                     size="small"
                     name={`actualCT-${rowIndex}`}
@@ -555,9 +582,10 @@ export const ProcessTable = ({
                     labelId={`idleCode-label-${rowIndex}`}
                     size="small"
                     id={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
+                    value={row.idleCode || []}
                     name={`idleCode-${rowIndex}`}
                     className="fixed-width-input"
+                    multiple
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -567,11 +595,21 @@ export const ProcessTable = ({
                         "Milling"
                       )
                     }
+                    // input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) =>
+                      selected.length > 0 ? selected.join(", ") : ""
+                    }
+                    // MenuProps={MenuProps}
                     error={processTableErrors[rowIndex]?.idleCode}
                   >
                     {idleCode.map((name) => (
                       <MenuItem key={name.no} value={name.no}>
-                        {name.name}
+                        <Checkbox
+                          checked={
+                            row.idleCode && row.idleCode.indexOf(name.no) > -1
+                          }
+                        />
+                        <ListItemText primary={name.name} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -583,6 +621,7 @@ export const ProcessTable = ({
                       : ""}
                   </FormHelperText>
                 </TableCell>
+
                 {/* <TableCell align="center">
                     <TextField
                       label="idleCode"
@@ -696,11 +735,15 @@ export const ProcessTable = ({
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="estimatedCT"
+                    label="ActualCT"
                     className="fixed-width-input"
                     size="small"
                     name={`estimatedCT-${rowIndex}`}
                     value={row.estimatedCT}
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -743,6 +786,27 @@ export const ProcessTable = ({
                     ))}
                   </Select>
                 </TableCell>
+                <TableCell align="center">
+                  <TextField
+                    id="outlined-textarea"
+                    label="Remark"
+                    className="input"
+                    size="small"
+                    name={`remark-${rowIndex}`}
+                    value={row.remark}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "remark",
+                        containerIndex,
+                        "Milling"
+                      )
+                    }
+                    placeholder="Enter Remark"
+                    multiline
+                  />
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -771,7 +835,7 @@ export const ProcessTable = ({
             <TableCell align="center">NOP</TableCell>
             <TableCell align="center">FPP</TableCell>
 
-            <TableCell align="center">Actual CT(min)</TableCell>
+            <TableCell align="center">Estimated CT(min)</TableCell>
 
             <TableCell align="center">Start Date</TableCell>
             <TableCell align="center">Start Time</TableCell>
@@ -782,8 +846,9 @@ export const ProcessTable = ({
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
-            <TableCell align="center">Estimated CT(min)</TableCell>
+            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">User Name</TableCell>
+            <TableCell align="center">Remark</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -810,7 +875,7 @@ export const ProcessTable = ({
                     id={`process-${rowIndex}`}
                     value={row.process}
                     name={`process-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     disabled
                     onChange={(e) =>
                       handleTextFieldChange(
@@ -838,7 +903,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <TextField
                     label="Description"
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     name={`description-${rowIndex}`}
                     value={row.description}
@@ -863,7 +928,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`machineName-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`machineName-${rowIndex}`}
                     value={row.machineName}
@@ -898,7 +963,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`toolingUsed-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`toolingUsed-${rowIndex}`}
                     value={row.toolingUsed} // Ensure that value is an array
@@ -1134,7 +1199,7 @@ export const ProcessTable = ({
 
                 <TableCell align="center">
                   <TextField
-                    label="actualCT"
+                    label="EstimatedCT"
                     className="fixed-width-input"
                     size="small"
                     name={`actualCT-${rowIndex}`}
@@ -1250,9 +1315,10 @@ export const ProcessTable = ({
                     labelId={`idleCode-label-${rowIndex}`}
                     size="small"
                     id={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
+                    value={row.idleCode || []}
                     name={`idleCode-${rowIndex}`}
                     className="fixed-width-input"
+                    multiple
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1262,11 +1328,21 @@ export const ProcessTable = ({
                         "Boring"
                       )
                     }
+                    // input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) =>
+                      selected.length > 0 ? selected.join(", ") : ""
+                    }
+                    // MenuProps={MenuProps}
                     error={processTableErrors[rowIndex]?.idleCode}
                   >
                     {idleCode.map((name) => (
                       <MenuItem key={name.no} value={name.no}>
-                        {name.name}
+                        <Checkbox
+                          checked={
+                            row.idleCode && row.idleCode.indexOf(name.no) > -1
+                          }
+                        />
+                        <ListItemText primary={name.name} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -1278,6 +1354,7 @@ export const ProcessTable = ({
                       : ""}
                   </FormHelperText>
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
                     label="startDate1"
@@ -1374,11 +1451,15 @@ export const ProcessTable = ({
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="estimatedCT"
+                    label="ActualCT"
                     className="fixed-width-input"
                     size="small"
                     name={`estimatedCT-${rowIndex}`}
                     value={row.estimatedCT}
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1421,6 +1502,27 @@ export const ProcessTable = ({
                     ))}
                   </Select>
                 </TableCell>
+                <TableCell align="center">
+                  <TextField
+                    id="outlined-textarea"
+                    label="Remark"
+                    className="input"
+                    size="small"
+                    name={`remark-${rowIndex}`}
+                    value={row.remark}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "remark",
+                        containerIndex,
+                        "Boring"
+                      )
+                    }
+                    placeholder="Enter Remark"
+                    multiline
+                  />
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -1449,7 +1551,7 @@ export const ProcessTable = ({
 
             {/* <TableCell align="center">EST.HRS</TableCell> */}
 
-            <TableCell align="center">Actual CT(min)</TableCell>
+            <TableCell align="center">Estimated CT(min)</TableCell>
             <TableCell align="center">Start Date</TableCell>
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
@@ -1459,8 +1561,9 @@ export const ProcessTable = ({
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
-            <TableCell align="center">Estimated CT(min)</TableCell>
+            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">User Name</TableCell>
+            <TableCell align="center">Remark</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -1487,7 +1590,7 @@ export const ProcessTable = ({
                     id={`process-${rowIndex}`}
                     value={row.process}
                     name={`process-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     disabled
                     onChange={(e) =>
                       handleTextFieldChange(
@@ -1515,7 +1618,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <TextField
                     label="Description"
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     name={`description-${rowIndex}`}
                     value={row.description}
@@ -1540,7 +1643,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`machineName-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`machineName-${rowIndex}`}
                     value={row.machineName}
@@ -1575,7 +1678,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`toolingUsed-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`toolingUsed-${rowIndex}`}
                     value={row.toolingUsed}
@@ -1736,7 +1839,7 @@ export const ProcessTable = ({
 
                 <TableCell align="center">
                   <TextField
-                    label="actualCT"
+                    label="EstimatedCT"
                     className="fixed-width-input"
                     size="small"
                     name={`actualCT-${rowIndex}`}
@@ -1852,9 +1955,10 @@ export const ProcessTable = ({
                     labelId={`idleCode-label-${rowIndex}`}
                     size="small"
                     id={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
+                    value={row.idleCode || []}
                     name={`idleCode-${rowIndex}`}
                     className="fixed-width-input"
+                    multiple
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -1864,11 +1968,21 @@ export const ProcessTable = ({
                         "Drilling"
                       )
                     }
+                    // input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) =>
+                      selected.length > 0 ? selected.join(", ") : ""
+                    }
+                    // MenuProps={MenuProps}
                     error={processTableErrors[rowIndex]?.idleCode}
                   >
                     {idleCode.map((name) => (
                       <MenuItem key={name.no} value={name.no}>
-                        {name.name}
+                        <Checkbox
+                          checked={
+                            row.idleCode && row.idleCode.indexOf(name.no) > -1
+                          }
+                        />
+                        <ListItemText primary={name.name} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -1880,6 +1994,7 @@ export const ProcessTable = ({
                       : ""}
                   </FormHelperText>
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
                     label="startDate1"
@@ -1976,11 +2091,15 @@ export const ProcessTable = ({
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="estimatedCT"
+                    label="ActualCT"
                     className="fixed-width-input"
                     size="small"
                     name={`estimatedCT-${rowIndex}`}
                     value={row.estimatedCT}
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -2023,6 +2142,27 @@ export const ProcessTable = ({
                     ))}
                   </Select>
                 </TableCell>
+                <TableCell align="center">
+                  <TextField
+                    id="outlined-textarea"
+                    label="Remark"
+                    className="input"
+                    size="small"
+                    name={`remark-${rowIndex}`}
+                    value={row.remark}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "remark",
+                        containerIndex,
+                        "Drilling"
+                      )
+                    }
+                    placeholder="Enter Remark"
+                    multiline
+                  />
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -2048,7 +2188,7 @@ export const ProcessTable = ({
 
             <TableCell align="center">NOH</TableCell>
 
-            <TableCell align="center">Actual CT(min)</TableCell>
+            <TableCell align="center">Estimated CT(min)</TableCell>
             <TableCell align="center">Start Date</TableCell>
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
@@ -2058,8 +2198,9 @@ export const ProcessTable = ({
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
-            <TableCell align="center">Estimated CT(min)</TableCell>
+            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">User Name</TableCell>
+            <TableCell align="center">Remark</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -2086,7 +2227,7 @@ export const ProcessTable = ({
                     id={`process-${rowIndex}`}
                     value={row.process}
                     name={`process-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     disabled
                     onChange={(e) =>
                       handleTextFieldChange(
@@ -2114,7 +2255,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <TextField
                     label="Description"
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     name={`description-${rowIndex}`}
                     value={row.description}
@@ -2139,7 +2280,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`machineName-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`machineName-${rowIndex}`}
                     value={row.machineName}
@@ -2174,7 +2315,7 @@ export const ProcessTable = ({
                 <TableCell align="center">
                   <Select
                     labelId={`toolingUsed-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`toolingUsed-${rowIndex}`}
                     value={row.toolingUsed} // Ensure that value is an array
@@ -2335,7 +2476,7 @@ export const ProcessTable = ({
 
                 <TableCell align="center">
                   <TextField
-                    label="actualCT"
+                    label="EstimatedCT"
                     className="fixed-width-input"
                     size="small"
                     name={`actualCT-${rowIndex}`}
@@ -2451,9 +2592,10 @@ export const ProcessTable = ({
                     labelId={`idleCode-label-${rowIndex}`}
                     size="small"
                     id={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
+                    value={row.idleCode || []}
                     name={`idleCode-${rowIndex}`}
                     className="fixed-width-input"
+                    multiple
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -2463,11 +2605,21 @@ export const ProcessTable = ({
                         "Tapping"
                       )
                     }
+                    // input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) =>
+                      selected.length > 0 ? selected.join(", ") : ""
+                    }
+                    // MenuProps={MenuProps}
                     error={processTableErrors[rowIndex]?.idleCode}
                   >
                     {idleCode.map((name) => (
                       <MenuItem key={name.no} value={name.no}>
-                        {name.name}
+                        <Checkbox
+                          checked={
+                            row.idleCode && row.idleCode.indexOf(name.no) > -1
+                          }
+                        />
+                        <ListItemText primary={name.name} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -2479,6 +2631,7 @@ export const ProcessTable = ({
                       : ""}
                   </FormHelperText>
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
                     label="startDate1"
@@ -2575,11 +2728,15 @@ export const ProcessTable = ({
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="estimatedCT"
+                    label="ActualCT"
                     className="fixed-width-input"
                     size="small"
                     name={`estimatedCT-${rowIndex}`}
                     value={row.estimatedCT}
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={(e) =>
                       handleTextFieldChange(
                         e,
@@ -2621,6 +2778,27 @@ export const ProcessTable = ({
                       </MenuItem>
                     ))}
                   </Select>
+                </TableCell>
+                <TableCell align="center">
+                  <TextField
+                    id="outlined-textarea"
+                    label="Remark"
+                    className="input"
+                    size="small"
+                    name={`remark-${rowIndex}`}
+                    value={row.remark}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "remark",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
+                    placeholder="Enter Remark"
+                    multiline
+                  />
                 </TableCell>
               </TableRow>
             ))}

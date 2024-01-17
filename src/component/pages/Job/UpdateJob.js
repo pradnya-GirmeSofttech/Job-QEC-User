@@ -140,7 +140,7 @@ function UpdateJob() {
   };
 
   const calculateCT = (updatedData) => {
-    if (!updatedData.idleCode) {
+    if (updatedData.idleCode.length === 0) {
       console.log(updatedData.startTime);
       const startDate = new Date(updatedData.startDate);
       const endDate = new Date(updatedData.endDate);
@@ -534,7 +534,7 @@ function UpdateJob() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center">Drag No</TableCell>
+                  <TableCell align="center">Drawing No</TableCell>
                   <TableCell align="center">
                     <TextField
                       label="Drag No"
