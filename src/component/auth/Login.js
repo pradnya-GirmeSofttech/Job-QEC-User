@@ -94,25 +94,30 @@ const Login = () => {
         </Typography>
         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
         <Typography variant="h6">Login</Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <TextField
-            label="Email Address"
+            id="outlined-basic"
+            label="Email address"
+            type="email"
             variant="outlined"
             fullWidth
             margin="normal"
             name="email"
+            autoComplete="username"
             value={formData.email}
             onChange={handleChange}
             error={formData.email && !isEmailValid()}
+            InputLabelProps={{
+              shrink: true,
+            }}
             helperText={
               formData.email && !isEmailValid()
                 ? "Invalid email format"
                 : error?.message === "Invalid Email or Password"
-                ? "Email does not exist"
-                : ""
             }
           />
           <TextField
+            id="outlined-basic"
             label="Password"
             variant="outlined"
             fullWidth
@@ -121,13 +126,14 @@ const Login = () => {
             type={formData.showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
             error={formData.password && formData.password.length < 8}
             helperText={
               formData.password && formData.password.length < 8
                 ? "Password must be at least 8 characters"
                 : error?.message === "Invalid Email or Password"
-                ? "Incorrect password"
-                : ""
             }
             InputProps={{
               endAdornment: (
@@ -142,18 +148,20 @@ const Login = () => {
               ),
             }}
           />
-          {formData.showAlert || error?.message === "User already exists" ? (
+          {formData.showAlert || error?.message ? (
             <Alert severity="error" sx={{ marginTop: 2 }}>
               <AlertTitle>Error</AlertTitle>
-              {formData.showAlert
-                ? "Please enter all fields."
-                : error?.message === "Invalid Email or Password"
-                ? "Invalid Email or Password"
-                : ""}
+              {formData.showAlert ? "Please enter all fields." : error?.message}
             </Alert>
           ) : null}
-          <Button type="submit" variant="contained" fullWidth>
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            m={2}
+            fullWidth
+            sx={{ backgroundColor: "#1d5393" }}
+          >
+            Login
           </Button>
         </form>
       </Card>
