@@ -16,14 +16,8 @@ import {
 } from "@mui/material";
 import "../component/pages/Job/ProcessTable.css";
 
-import {
-  idleCode,
-  machineData,
-  processList,
-  toolList,
-  userName,
-} from "../component/pages/Job/Data";
-import { formattedEditDate } from "../component/pages/Job/formattedDate";
+import { idleCode, machineData, processList, toolList, userName } from "./Data";
+import { formattedEditDate } from "./formattedDate";
 
 function BoringTable({
   processTableData,

@@ -17,8 +17,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProcessTable } from "./ProcessTable";
 import { useDispatch, useSelector } from "react-redux";
 import { editJob, getSingleJob } from "../../../actions/job";
-import { ArrowBack } from "./BackArrow";
-import { formattedEditDate } from "./formattedDate";
+import { ArrowBack } from "../../../common/BackArrow";
+import { formattedEditDate } from "../../../common/formattedDate";
 import Loader from "../../loader/Loader";
 
 function UpdateJob() {

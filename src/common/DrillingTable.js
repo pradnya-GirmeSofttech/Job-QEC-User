@@ -15,15 +15,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import "../component/pages/Job/ProcessTable.css";
-import { formattedEditDate } from "../component/pages/Job/formattedDate";
+import { formattedEditDate } from "./formattedDate";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  idleCode,
-  machineData,
-  processList,
-  toolList,
-  userName,
-} from "../component/pages/Job/Data";
+import { idleCode, machineData, processList, toolList, userName } from "./Data";
 
 function DrillingTable({
   processTableData,
