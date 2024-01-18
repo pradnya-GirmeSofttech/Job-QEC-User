@@ -34,28 +34,33 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/login", {
-        email: email,
-        password: password,
-      });
+      const response = await api.post(
+        "/login",
+        {
+          email: email,
+          password: password,
+        },
+        { headers: { "X-User-Side": "true" } }
+      );
 
       // Assuming your API returns a token on successful login
       const token = response.data.token;
       const userData = response.data.user;
       // Save the token to local storage
-      localStorage.setItem("token", token);
+      localStorage.setItem("Job_Qec_User", token);
 
       return { success: true, token: token, user: userData };
     } catch (error) {
       // Handle login failure
-      console.error(
-        "Login failed:",
-        error.response ? error.response.data : error.message
-      );
-      return {
+      console.error(error.message);
+      // return {
+      //   success: false,
+      //   error: error.response ? error.response.data : error.message,
+      // };
+      return rejectWithValue({
         success: false,
         error: error.response ? error.response.data : error.message,
-      };
+      });
     }
   }
 );
@@ -66,7 +71,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await api.get(`/logout`);
-      localStorage.removeItem("token");
+      localStorage.removeItem("Job_Qec_User");
       return null;
     } catch (error) {
       console.error("Logout error:", error);
@@ -181,6 +186,7 @@ export const changePassword = createAsyncThunk(
 export const userProfile = createAsyncThunk("auth/userProfile", async () => {
   try {
     const response = await api.get(`/me`);
+
     console.log("response", response);
     const user = response.data;
 

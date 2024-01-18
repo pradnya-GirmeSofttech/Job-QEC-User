@@ -17,8 +17,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProcessTable } from "./ProcessTable";
 import { useDispatch, useSelector } from "react-redux";
 import { editJob, getSingleJob } from "../../../actions/job";
-import { ArrowBack } from "./BackArrow";
-import { formattedEditDate } from "./formattedDate";
+import { ArrowBack } from "../../../common/BackArrow";
+import { formattedEditDate } from "../../../common/formattedDate";
 import Loader from "../../loader/Loader";
 
 function UpdateJob() {
@@ -140,7 +140,7 @@ function UpdateJob() {
   };
 
   const calculateCT = (updatedData) => {
-    if (!updatedData.idleCode) {
+    if (updatedData.idleCode.length === 0) {
       console.log(updatedData.startTime);
       const startDate = new Date(updatedData.startDate);
       const endDate = new Date(updatedData.endDate);
@@ -534,7 +534,7 @@ function UpdateJob() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell align="center">Drag No</TableCell>
+                  <TableCell align="center">Drawing No</TableCell>
                   <TableCell align="center">
                     <TextField
                       label="Drag No"
@@ -570,7 +570,7 @@ function UpdateJob() {
                     <Select
                       value={container.processName}
                       label="processName"
-                      className="fixed-width-input"
+                      className="input"
                       size="small"
                       onChange={(e) => handleDropdownChange(e, containerIndex)}
                       selectedProcessName={container.processName}

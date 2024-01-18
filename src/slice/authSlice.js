@@ -36,7 +36,7 @@ const authSlice = createSlice({
         console.log(action.payload); // Log the payload for debugging
         state.loading = false;
         state.user = null;
-        state.error = action.payload.error; // Ensure the error property is used
+        state.error = action.payload.error;
         state.isAuthenticated = false;
       })
       .addCase(changePassword.pending, (state, action) => {

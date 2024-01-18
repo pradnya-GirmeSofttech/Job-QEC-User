@@ -23,6 +23,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import logo from "../../utils/logo.png";
 import WorkIcon from "@mui/icons-material/Work";
 import { logout } from "../../actions/auth";
+import UserProfileModal from "./common/UseProfileModal";
 
 const drawerWidth = 240;
 const Dashboard = ({ children }) => {
@@ -158,7 +159,7 @@ const Dashboard = ({ children }) => {
         </Toolbar>
       </AppBar>
       {isModalOpen && (
-        <UseProfileModal
+        <UserProfileModal
           user={user}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

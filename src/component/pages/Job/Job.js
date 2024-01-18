@@ -25,6 +25,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch, useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Loader from "../../loader/Loader";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function Job() {
   const navigation = useNavigate();
@@ -100,12 +101,17 @@ function Job() {
     console.log("id", id);
   };
 
+  const handleClearSearch = () => {
+    setSearchQuery(""); // Clear the searchQuery state
+  };
   // Filter jobs based on job name or SO/WO number
   const filteredJobs = jobs
     ? jobs?.filter((job) => {
         // Check if the job object and its properties are defined
         if (job && job.jobName && job.soWo) {
-          const jobNameMatch = job.jobName.toLowerCase().includes(searchQuery);
+          const jobNameMatch = job.jobName
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
           const soWoMatch = job.soWo.toString().includes(searchQuery);
           return jobNameMatch || soWoMatch;
         }
@@ -113,6 +119,10 @@ function Job() {
         return false;
       })
     : [];
+
+  const sortedJobs = [...filteredJobs].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   const noJobsAvailable = filteredJobs.length === 0;
 
   return (
@@ -135,17 +145,19 @@ function Job() {
               >
                 <InputBase
                   sx={{ ml: 1, flex: 1 }}
-                  placeholder="Search"
+                  placeholder="Search SO/WO NO or Job Name"
                   inputProps={{ "aria-label": "search google maps" }}
                   onChange={handleSearch}
+                  value={searchQuery}
                   size="small"
                 />
                 <IconButton
                   type="button"
                   sx={{ p: "10px" }}
                   aria-label="search"
+                  onClick={handleClearSearch}
                 >
-                  <SearchIcon />
+                  <ClearIcon />
                 </IconButton>
               </Paper>
             </Box>
@@ -177,7 +189,7 @@ function Job() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {filteredJobs?.slice(startIndex, endIndex).map((job) => (
+                    {sortedJobs?.slice(startIndex, endIndex).map((job) => (
                       <TableRow
                         key={job._id}
                         style={{
@@ -227,15 +239,17 @@ function Job() {
                 </Table>
               </TableContainer>
 
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                component="div"
-                count={jobs.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              {!searchQuery && (
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  component="div"
+                  count={jobs.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              )}
             </>
           )}
         </Box>
