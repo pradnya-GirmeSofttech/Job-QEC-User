@@ -570,7 +570,7 @@ function UpdateJob() {
                     <Select
                       value={container.processName}
                       label="processName"
-                      className="fixed-width-input"
+                      className="input"
                       size="small"
                       onChange={(e) => handleDropdownChange(e, containerIndex)}
                       selectedProcessName={container.processName}

@@ -1,48 +1,55 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
   TextField,
-  IconButton,
-  Button,
-  Box,
   Select,
   MenuItem,
-  Typography,
+  FormHelperText,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
-import "./ProcessTable.css";
-import Dashboard from "../../dashboard/Dashboard";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useNavigate } from "react-router-dom";
-import { ProcessTable } from "./ProcessTable";
-import ClearIcon from "@mui/icons-material/Clear";
-import { useDispatch } from "react-redux";
-import { createJob } from "../../../actions/job";
-import { ArrowBack } from "./BackArrow";
-import { processList } from "./Data";
+import "../component/pages/Job/ProcessTable.css";
+import { formattedEditDate } from "../component/pages/Job/formattedDate";
 
-export const millingTable = (
-  <>
-    <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+import {
+  idleCode,
+  machineData,
+  processList,
+  toolList,
+  userName,
+} from "../component/pages/Job/Data";
+
+function TappingTable({
+  processTableData,
+  handleTextFieldChange,
+  processTableErrors,
+  containerIndex,
+}) {
+  return (
+    <>
       <Table sx={{ minWidth: 2800 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">Sr.No</TableCell>
-            <TableCell align="center">No</TableCell>
             <TableCell align="center">Process</TableCell>
             <TableCell align="center">Description</TableCell>
             <TableCell align="center">Machine Name</TableCell>
             <TableCell align="center">Tooling Used</TableCell>
-            <TableCell align="center">DC</TableCell>
+
+            <TableCell align="center">DIA</TableCell>
+            <TableCell align="center">RPM</TableCell>
+            <TableCell align="center">Feed(MM/MIN)</TableCell>
             <TableCell align="center">Length</TableCell>
-            <TableCell align="center">Width</TableCell>
-            <TableCell align="center">Feed</TableCell>
+
+            <TableCell align="center">NOH</TableCell>
+
             <TableCell align="center">Estimated CT(min)</TableCell>
-            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">Start Date</TableCell>
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
@@ -52,26 +59,28 @@ export const millingTable = (
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
+            <TableCell align="center">Actual CT(min)</TableCell>
             <TableCell align="center">User Name</TableCell>
+            <TableCell align="center">Remark</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {processTableData &&
             processTableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow
+                key={rowIndex}
+                style={{
+                  color: "#fff",
+                  backgroundColor:
+                    !isNaN(row.estimatedCT) && row.estimatedCT !== 0
+                      ? row.actualCT >= row.estimatedCT
+                        ? "#78cc9f"
+                        : "#c34266"
+                      : "inherit",
+                }}
+              >
                 <TableCell align="center">{rowIndex + 1}</TableCell>
-                <TableCell align="center">
-                  <ModeStandbyOutlinedIcon
-                    style={{
-                      color:
-                        row.actualCT > row.estimatedCT
-                          ? "red" // Actual CT is more than Estimated CT + 10
-                          : row.actualCT < row.estimatedCT
-                          ? "green" // Actual CT is less than Estimated CT - 10
-                          : "inherit", // Default background color
-                    }}
-                  />
-                </TableCell>
+
                 <TableCell align="center">
                   <Select
                     labelId={`process-label-${rowIndex}`}
@@ -79,9 +88,16 @@ export const millingTable = (
                     id={`process-${rowIndex}`}
                     value={row.process}
                     name={`process-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "process")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "process",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     error={processTableErrors[rowIndex]?.process}
                   >
@@ -100,12 +116,19 @@ export const millingTable = (
                 <TableCell align="center">
                   <TextField
                     label="Description"
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     name={`description-${rowIndex}`}
                     value={row.description}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "description")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "description",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     error={processTableErrors[rowIndex]?.description}
                     helperText={
@@ -118,13 +141,20 @@ export const millingTable = (
                 <TableCell align="center">
                   <Select
                     labelId={`machineName-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`machineName-${rowIndex}`}
                     value={row.machineName}
                     name={`machineName-${rowIndex}`}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "machineName")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "machineName",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     error={processTableErrors[rowIndex]?.machineName}
                   >
@@ -146,14 +176,20 @@ export const millingTable = (
                 <TableCell align="center">
                   <Select
                     labelId={`toolingUsed-label-${rowIndex}`}
-                    className="fixed-width-input"
+                    className="input"
                     size="small"
                     id={`toolingUsed-${rowIndex}`}
-                    value={row.toolingUsed || []} // Ensure that value is an array
-                    multiple // Enable multiple selection
+                    value={row.toolingUsed} // Ensure that value is an array
                     name={`toolingUsed-${rowIndex}`}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "toolingUsed")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "toolingUsed",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     error={processTableErrors[rowIndex]?.toolingUsed}
                   >
@@ -174,15 +210,24 @@ export const millingTable = (
 
                 <TableCell align="center">
                   <TextField
-                    label="dc"
+                    label="dia"
                     className="fixed-width-input"
                     size="small"
-                    name={`dc-${rowIndex}`}
-                    value={row.dc}
-                    onChange={(e) => handleTextFieldChange(e, rowIndex, "dc")}
-                    error={processTableErrors[rowIndex]?.dc}
+                    name={`dia-${rowIndex}`}
+                    value={row.dia}
+                    disabled
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "dia",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
+                    error={processTableErrors[rowIndex]?.dia}
                     helperText={
-                      processTableErrors[rowIndex]?.dc
+                      processTableErrors[rowIndex]?.dia
                         ? "This field is required"
                         : ""
                     }
@@ -190,35 +235,24 @@ export const millingTable = (
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="length"
+                    label="rpm"
                     className="fixed-width-input"
                     size="small"
-                    name={`length-${rowIndex}`}
-                    value={row.length}
+                    name={`rpm-${rowIndex}`}
+                    value={row.rpm}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "length")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "rpm",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    error={processTableErrors[rowIndex]?.length}
+                    error={processTableErrors[rowIndex]?.rpm}
                     helperText={
-                      processTableErrors[rowIndex]?.length
-                        ? "This field is required"
-                        : ""
-                    }
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <TextField
-                    label="width"
-                    className="fixed-width-input"
-                    size="small"
-                    name={`width-${rowIndex}`}
-                    value={row.width}
-                    onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "width")
-                    }
-                    error={processTableErrors[rowIndex]?.width}
-                    helperText={
-                      processTableErrors[rowIndex]?.width
+                      processTableErrors[rowIndex]?.rpm
                         ? "This field is required"
                         : ""
                     }
@@ -231,7 +265,16 @@ export const millingTable = (
                     size="small"
                     name={`feed-${rowIndex}`}
                     value={row.feed}
-                    onChange={(e) => handleTextFieldChange(e, rowIndex, "feed")}
+                    disabled
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "feed",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
                     error={processTableErrors[rowIndex]?.feed}
                     helperText={
                       processTableErrors[rowIndex]?.feed
@@ -242,31 +285,72 @@ export const millingTable = (
                 </TableCell>
                 <TableCell align="center">
                   <TextField
-                    label="estimatedCT"
+                    label="length"
                     className="fixed-width-input"
                     size="small"
-                    name={`estimatedCT-${rowIndex}`}
-                    value={row.estimatedCT}
+                    name={`length-${rowIndex}`}
+                    value={row.length}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "estimatedCT")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "length",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    error={processTableErrors[rowIndex]?.estimatedCT}
+                    error={processTableErrors[rowIndex]?.length}
                     helperText={
-                      processTableErrors[rowIndex]?.estimatedCT
+                      processTableErrors[rowIndex]?.length
                         ? "This field is required"
                         : ""
                     }
                   />
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
-                    label="actualCT"
+                    label="noh"
+                    className="fixed-width-input"
+                    size="small"
+                    name={`noh-${rowIndex}`}
+                    value={row.noh}
+                    disabled
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "noh",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
+                    error={processTableErrors[rowIndex]?.noh}
+                    helperText={
+                      processTableErrors[rowIndex]?.noh
+                        ? "This field is required"
+                        : ""
+                    }
+                  />
+                </TableCell>
+
+                <TableCell align="center">
+                  <TextField
+                    label="EstimatedCT"
                     className="fixed-width-input"
                     size="small"
                     name={`actualCT-${rowIndex}`}
                     value={row.actualCT}
+                    disabled
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "actualCT")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "actualCT",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                   />
                 </TableCell>
@@ -279,9 +363,17 @@ export const millingTable = (
                     name={`startDate-${rowIndex}`}
                     value={formattedEditDate(row.startDate)}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "startDate")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "startDate",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                    inputProps={{
+                      min: new Date().toISOString().split("T")[0],
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -296,7 +388,13 @@ export const millingTable = (
                     name={`startTime-${rowIndex}`}
                     value={row.startTime}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "startTime")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "startTime",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     InputLabelProps={{
                       shrink: true,
@@ -312,9 +410,17 @@ export const millingTable = (
                     className="fixed-width-input"
                     value={formattedEditDate(row.endDate)}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "endDate")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "endDate",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                    inputProps={{
+                      min: new Date().toISOString().split("T")[0],
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -329,7 +435,13 @@ export const millingTable = (
                     className="fixed-width-input"
                     value={row.endTime}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "endTime")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "endTime",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     InputLabelProps={{
                       shrink: true,
@@ -337,17 +449,50 @@ export const millingTable = (
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <TextField
-                    label="idleCode"
+                  <Select
+                    labelId={`idleCode-label-${rowIndex}`}
                     size="small"
-                    className="fixed-width-input"
+                    id={`idleCode-${rowIndex}`}
+                    value={row.idleCode || []}
                     name={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
+                    className="fixed-width-input"
+                    multiple
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "idleCode")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "idleCode",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                  />
+                    // input={<OutlinedInput label="Tag" />}
+                    renderValue={(selected) =>
+                      selected.length > 0 ? selected.join(", ") : ""
+                    }
+                    // MenuProps={MenuProps}
+                    error={processTableErrors[rowIndex]?.idleCode}
+                  >
+                    {idleCode.map((name) => (
+                      <MenuItem key={name.no} value={name.no}>
+                        <Checkbox
+                          checked={
+                            row.idleCode && row.idleCode.indexOf(name.no) > -1
+                          }
+                        />
+                        <ListItemText primary={name.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText
+                    error={processTableErrors[rowIndex]?.idleCode}
+                  >
+                    {processTableErrors[rowIndex]?.idleCode
+                      ? "This field is required"
+                      : ""}
+                  </FormHelperText>
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
                     label="startDate1"
@@ -357,9 +502,17 @@ export const millingTable = (
                     value={formattedEditDate(row.startDate1)}
                     className="fixed-width-input"
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "startDate1")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "startDate1",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                    inputProps={{
+                      min: new Date().toISOString().split("T")[0],
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -374,7 +527,13 @@ export const millingTable = (
                     className="fixed-width-input"
                     value={row.startTime1}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "startTime1")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "startTime1",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     InputLabelProps={{
                       shrink: true,
@@ -390,9 +549,17 @@ export const millingTable = (
                     name={`endDate1-${rowIndex}`}
                     value={formattedEditDate(row.endDate1)}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "endDate1")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "endDate1",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
-                    inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                    inputProps={{
+                      min: new Date().toISOString().split("T")[0],
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -407,11 +574,45 @@ export const millingTable = (
                     name={`endTime1-${rowIndex}`}
                     value={row.endTime1}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "endTime1")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "endTime1",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                     InputLabelProps={{
                       shrink: true,
                     }}
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <TextField
+                    label="ActualCT"
+                    className="fixed-width-input"
+                    size="small"
+                    name={`estimatedCT-${rowIndex}`}
+                    value={row.estimatedCT}
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "estimatedCT",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
+                    error={processTableErrors[rowIndex]?.estimatedCT}
+                    helperText={
+                      processTableErrors[rowIndex]?.estimatedCT
+                        ? "This field is required"
+                        : ""
+                    }
                   />
                 </TableCell>
                 <TableCell align="center">
@@ -423,7 +624,13 @@ export const millingTable = (
                     value={row.userName}
                     name={`userName-${rowIndex}`}
                     onChange={(e) =>
-                      handleTextFieldChange(e, rowIndex, "userName")
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "userName",
+                        containerIndex,
+                        "Tapping"
+                      )
                     }
                   >
                     {userName.map((name) => (
@@ -433,31 +640,33 @@ export const millingTable = (
                     ))}
                   </Select>
                 </TableCell>
-
                 <TableCell align="center">
-                  <IconButton
+                  <TextField
+                    id="outlined-textarea"
+                    label="Remark"
+                    className="input"
                     size="small"
-                    onClick={() => handleDeleteRow(containerIndex, rowIndex)}
-                  >
-                    <ClearIcon color="error" />
-                  </IconButton>
+                    name={`remark-${rowIndex}`}
+                    value={row.remark}
+                    onChange={(e) =>
+                      handleTextFieldChange(
+                        e,
+                        rowIndex,
+                        "remark",
+                        containerIndex,
+                        "Tapping"
+                      )
+                    }
+                    placeholder="Enter Remark"
+                    multiline
+                  />
                 </TableCell>
               </TableRow>
             ))}
-          <Button
-            color="primary"
-            sx={{
-              backgroundColor: "#1d5393",
-              color: "#fff",
-              width: 100,
-              margin: 3,
-            }}
-            onClick={() => handleAddRow(containerIndex)}
-          >
-            Add Row
-          </Button>
         </TableBody>
       </Table>
-    </TableContainer>
-  </>
-);
+    </>
+  );
+}
+
+export default TappingTable;
