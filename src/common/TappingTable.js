@@ -68,8 +68,8 @@ function TappingTable({
                   backgroundColor:
                     !isNaN(row.estimatedCT) && row.estimatedCT !== 0
                       ? row.actualCT >= row.estimatedCT
-                        ? "#78cc9f"
-                        : "#c34266"
+                        ? "#a7f3d0"
+                        : "#FE8A96"
                       : "inherit",
                 }}
               >
