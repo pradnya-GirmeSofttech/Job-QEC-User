@@ -513,10 +513,10 @@ function UpdateJob() {
                       }}
                     />
                   </TableCell>
-                  <TableCell align="center">Total CT</TableCell>
+                  <TableCell align="center">Estimated CT</TableCell>
                   <TableCell align="center">
                     <TextField
-                      label="Total CT"
+                      label="Estimated CT"
                       id="outlined-size-small"
                       size="small"
                       name="estimatedtotalCT"
@@ -569,7 +569,7 @@ function UpdateJob() {
                   <TableCell>
                     <Select
                       value={container.processName}
-                      label="processName"
+                      label="Main Process Name"
                       className="input"
                       size="small"
                       onChange={(e) => handleDropdownChange(e, containerIndex)}

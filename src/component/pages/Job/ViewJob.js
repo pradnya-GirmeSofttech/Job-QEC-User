@@ -54,7 +54,7 @@ function ViewJob() {
                   <TableCell>{jobs[0]?.jobName}</TableCell>
                   <TableCell>PO No</TableCell>
                   <TableCell>{jobs[0]?.poNo}</TableCell>
-                  <TableCell>Total CT</TableCell>
+                  <TableCell>Estimated CT</TableCell>
                   <TableCell align="center">
                     {jobs[0]?.estimatedtotalCT}
                   </TableCell>
