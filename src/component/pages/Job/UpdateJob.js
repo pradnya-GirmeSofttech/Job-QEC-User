@@ -628,6 +628,7 @@ function UpdateJob() {
                 id="outlined-size-small"
                 size="small"
                 name="actualtotalCT"
+                disabled
                 value={formData?.actualtotalCT}
                 onChange={handleChange}
                 InputLabelProps={{

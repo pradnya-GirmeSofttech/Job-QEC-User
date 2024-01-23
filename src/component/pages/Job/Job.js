@@ -198,8 +198,8 @@ function Job() {
                           backgroundColor:
                             job.estimatedtotalCT >= job?.actualtotalCT ||
                             job.estimatedtotalCT >= job?.actualtotalCT
-                              ? "#78cc9f"
-                              : "#c34266",
+                              ? "#a7f3d0"
+                              : "#FE8A96",
                         }}
                       >
                         <TableCell>{job.soWo}</TableCell>
