@@ -364,8 +364,29 @@ export const processList = [
   "Setting Material Action ",
 ];
 
-export const userName = ["Pratiksha", "Pradnya"];
-
+// export const userName = ["Pratiksha", "Pradnya"];
+export const userName = [
+  "Ganesh Gore",
+  "Vishal Zende",
+  "Lahu Khatate",
+  "Changdev Kudale",
+  "Prajwal  Khatate",
+  "Saurabh Hole",
+  "Kishor Urke",
+  "Amit Kale",
+  "Jagannath Raut",
+  "Kamlesh Kumar",
+  "Chetan Kadam",
+  "Ganesh Raut",
+  "Gurudas Kapure",
+  "Santosh Pawar",
+  "Nagesh Jagtap",
+  "Dnyaneshwar Padalwar",
+  "Arbaj Attar",
+  "Mark Reddy",
+  "Jagannath Avhad",
+  "Aman Attar",
+];
 export const idleCode = [
   { no: 1, name: "No Power (Electricity)" },
   { no: 2, name: "Drawing Issue" },
