@@ -11,6 +11,8 @@ import {
   Box,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import Dashboard from "../../dashboard/Dashboard";
 import { useNavigate, useParams } from "react-router-dom";
@@ -567,20 +569,46 @@ function UpdateJob() {
                 <div>
                   <TableCell>{containerIndex + 1}</TableCell>
                   <TableCell>
-                    <Select
-                      value={container.processName}
-                      label="Main Process Name"
+                    <FormControl>
+                      <InputLabel
+                        id="demo-multiple-name-label"
+                        style={{ color: "#1D5393" }}
+                      >
+                        MainProcessName
+                      </InputLabel>
+                      <Select
+                        value={container.processName}
+                        label="processName"
+                        className="input"
+                        size="large"
+                        disabled
+                        onChange={(e) =>
+                          handleDropdownChange(e, containerIndex, "processName")
+                        }
+                      >
+                        <MenuItem value="Milling">MILLING</MenuItem>
+                        <MenuItem value="Boring">BORING</MenuItem>
+                        <MenuItem value="Drilling">DRILLING</MenuItem>
+                        <MenuItem value="Tapping">TAPPING</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </TableCell>
+                  <TableCell align="center">
+                    Setting for All Process Admin have to add setting Time in
+                    minutes
+                  </TableCell>
+                  <TableCell align="center">
+                    <TextField
+                      label="settingTime"
                       className="input"
-                      size="small"
-                      onChange={(e) => handleDropdownChange(e, containerIndex)}
-                      selectedProcessName={container.processName}
                       disabled
-                    >
-                      <MenuItem value="Milling">MILLING</MenuItem>
-                      <MenuItem value="Boring">BORING</MenuItem>
-                      <MenuItem value="Drilling">DRILLING</MenuItem>
-                      <MenuItem value="Tapping">TAPPING</MenuItem>
-                    </Select>
+                      size="small"
+                      name={`setting-${containerIndex}`}
+                      value={container.setting}
+                      onChange={(e) =>
+                        handleDropdownChange(e, containerIndex, "setting")
+                      }
+                    />
                   </TableCell>
                 </div>
               </TableRow>
