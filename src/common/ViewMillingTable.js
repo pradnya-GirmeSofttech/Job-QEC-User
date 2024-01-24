@@ -32,6 +32,9 @@ const ViewMillingTable = ({ processTableData }) => {
             <TableCell align="center" sx={{ color: "#fff" }}>
               Tooling Used
             </TableCell>
+            <TableCell align="center" sx={{ color: "#fff" }}>
+              Tooling Size
+            </TableCell>
 
             <TableCell align="center" sx={{ color: "#fff" }}>
               Length
@@ -119,6 +122,7 @@ const ViewMillingTable = ({ processTableData }) => {
                 <TableCell align="center">{row.description}</TableCell>
                 <TableCell align="center">{row.machineName}</TableCell>
                 <TableCell align="center">{row.toolingUsed}</TableCell>
+                <TableCell align="center">{row.toolingSize}</TableCell>
                 <TableCell align="center">{row.length}</TableCell>
                 <TableCell align="center">{row.width}</TableCell>
                 <TableCell align="center">{row.dc}</TableCell>
@@ -130,11 +134,12 @@ const ViewMillingTable = ({ processTableData }) => {
                   {row.estimatedHrs ? row.estimatedHrs : "-"}
                 </TableCell>
                 <TableCell align="center">
-                  {row.estimatedCT ? row.estimatedCT : "-"}
-                </TableCell>
-                <TableCell align="center">
                   {row.actualCT ? row.actualCT : "-"}
                 </TableCell>
+                <TableCell align="center">
+                  {row.estimatedCT ? row.estimatedCT : "-"}
+                </TableCell>
+
                 <TableCell align="center">
                   {formattedDate(row.startDate)}
                 </TableCell>

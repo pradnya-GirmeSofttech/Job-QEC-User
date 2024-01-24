@@ -123,11 +123,12 @@ function ViewDrillingTable({ processTableData }) {
                 <TableCell align="center">
                   {row.estimatedHrs ? row.estimatedHrs : "-"}
                 </TableCell>
-                <TableCell align="center">
-                  {row.estimatedCT ? row.estimatedCT : "-"}
-                </TableCell>
+
                 <TableCell align="center">
                   {row.actualCT ? row.actualCT : "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {row.estimatedCT ? row.estimatedCT : "-"}
                 </TableCell>
                 <TableCell align="center">
                   {formattedDate(row.startDate)}

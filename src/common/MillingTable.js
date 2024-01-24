@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Paper,
@@ -11,12 +10,11 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Checkbox,
-  ListItemText,
+  Autocomplete,
 } from "@mui/material";
 import "../component/pages/Job/ProcessTable.css";
 import { formattedEditDate } from "./formattedDate";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
 import { idleCode, machineData, processList, toolList, userName } from "./Data";
 
 function MillingTable({
@@ -551,67 +549,35 @@ function MillingTable({
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Select
-                    labelId={`idleCode-label-${rowIndex}`}
-                    size="small"
+                  <Autocomplete
+                    disablePortal
                     id={`idleCode-${rowIndex}`}
-                    value={row.idleCode || []}
-                    name={`idleCode-${rowIndex}`}
-                    className="fixed-width-input"
+                    options={idleCode}
+                    getOptionLabel={(option) => option.name}
+                    value={row.idleCode}
+                    className="input"
                     multiple
-                    onChange={(e) =>
+                    onChange={(e, newValue) =>
                       handleTextFieldChange(
-                        e,
+                        { target: { value: newValue } },
                         rowIndex,
                         "idleCode",
                         containerIndex,
                         "Milling"
                       )
                     }
-                    // input={<OutlinedInput label="Tag" />}
-                    renderValue={(selected) =>
-                      selected.length > 0 ? selected.join(", ") : ""
-                    }
-                    // MenuProps={MenuProps}
-                    error={processTableErrors[rowIndex]?.idleCode}
-                  >
-                    {idleCode.map((name) => (
-                      <MenuItem key={name.no} value={name.no}>
-                        <Checkbox
-                          checked={
-                            row.idleCode && row.idleCode.indexOf(name.no) > -1
-                          }
-                        />
-                        <ListItemText primary={name.name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText
-                    error={processTableErrors[rowIndex]?.idleCode}
-                  >
-                    {processTableErrors[rowIndex]?.idleCode
-                      ? "This field is required"
-                      : ""}
-                  </FormHelperText>
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="idleCode"
+                        size="small"
+                        name={`idleCode-${rowIndex}`}
+                        className="input"
+                      />
+                    )}
+                  />
                 </TableCell>
 
-                {/* <TableCell align="center">
-                  <TextField
-                    label="idleCode"
-                    size="small"
-                    className="fixed-width-input"
-                    name={`idleCode-${rowIndex}`}
-                    value={row.idleCode}
-                    onChange={(e) =>
-                      handleTextFieldChange(
-                        e,
-                        rowIndex,
-                        "idleCode",
-                        containerIndex
-                      )
-                    }
-                  />
-                </TableCell> */}
                 <TableCell align="center">
                   <TextField
                     label="startDate1"
@@ -735,30 +701,34 @@ function MillingTable({
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Select
-                    labelId={`userName-label-${rowIndex}`}
-                    className="fixed-width-input"
-                    size="small"
+                  <Autocomplete
+                    disablePortal
                     id={`userName-${rowIndex}`}
+                    options={userName}
+                    getOptionLabel={(option) => option}
                     value={row.userName}
-                    name={`userName-${rowIndex}`}
-                    onChange={(e) =>
+                    className="input"
+                    onChange={(e, newValue) =>
                       handleTextFieldChange(
-                        e,
+                        { target: { value: newValue } },
                         rowIndex,
                         "userName",
                         containerIndex,
                         "Milling"
                       )
                     }
-                  >
-                    {userName.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="UserName"
+                        size="small"
+                        name={`userName-${rowIndex}`}
+                        className="input"
+                      />
+                    )}
+                  />
                 </TableCell>
+
                 <TableCell align="center">
                   <TextField
                     id="outlined-textarea"
