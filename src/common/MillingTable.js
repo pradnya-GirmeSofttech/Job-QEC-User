@@ -52,7 +52,7 @@ function MillingTable({
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>
             <TableCell align="center">End Time</TableCell>
-            <TableCell align="center">Ideal Code</TableCell>
+            <TableCell align="center">Idle Code</TableCell>
             <TableCell align="center">Start Date</TableCell>
             <TableCell align="center">Start Time</TableCell>
             <TableCell align="center">End Date</TableCell>

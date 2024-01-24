@@ -79,7 +79,7 @@ const ViewMillingTable = ({ processTableData }) => {
               End Time
             </TableCell>
             <TableCell align="center" sx={{ color: "#fff" }}>
-              Ideal Code
+              Idle Code
             </TableCell>
             <TableCell align="center" sx={{ color: "#fff" }}>
               Start Date
