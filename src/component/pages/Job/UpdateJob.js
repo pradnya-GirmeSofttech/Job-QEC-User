@@ -633,6 +633,12 @@ function UpdateJob() {
                   backgroundColor: "#1d5393",
                   color: "#fff",
                   marginRight: "10px",
+                  "&:hover": {
+                    backgroundColor: "#245BA1", // Adjust the color for hover effect
+                  },
+                  "&:active": {
+                    backgroundColor: "#1d5393", // Keep the same color as the initial state
+                  },
                 }}
                 onClick={handleSubmit}
               >
@@ -646,10 +652,17 @@ function UpdateJob() {
                   backgroundColor: "#1d5393",
                   color: "#fff",
                   marginRight: 2,
+                  // margin: 3,
+                  "&:hover": {
+                    backgroundColor: "#245BA1", // Adjust the color for hover effect
+                  },
+                  "&:active": {
+                    backgroundColor: "#1d5393", // Keep the same color as the initial state
+                  },
                 }}
                 onClick={calculateTotalCT}
               >
-                CalculateTotal CT
+                Calculate Total CT
               </Button>
               <TextField
                 label="Actual Total CT"

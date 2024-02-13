@@ -5,6 +5,8 @@ import {
   AppBar,
   Toolbar,
   List,
+  Grid,
+  Divider,
   ListItem,
   ListItemText,
   Button,
@@ -74,44 +76,57 @@ const Dashboard = ({ children }) => {
   };
 
   const drawer = (
-    <div>
-      <Toolbar sx={{ marginTop: 3 }}>
-        <img src={logo} alt="logo" className="logo" />
-      </Toolbar>
-      {/* <Divider /> */}
-      <List sx={{ marginTop: 4 }}>
-        <ListItem
-          component={Link}
-          to="/dashboard"
-          className={listItemStyle("/dashboard")}
-        >
-          <ListItemIcon
-            sx={{
-              color: location.pathname === "/dashboard" ? "white" : "#1D5393",
-            }}
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-between"
+      height="100%"
+    >
+      <Grid item>
+        <Toolbar sx={{ marginTop: 3 }}>
+          <img src={logo} alt="logo" className="logo" />
+        </Toolbar>
+        {/* <Divider /> */}
+        <List sx={{ marginTop: 4 }}>
+          <ListItem
+            component={Link}
+            to="/dashboard"
+            className={listItemStyle("/dashboard")}
           >
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem
-          component={Link}
-          to="/dashboard/job"
-          className={listItemStyle("/dashboard/job")}
-        >
-          <ListItemIcon
-            sx={{
-              color: location.pathname.startsWith("/dashboard/job")
-                ? "white"
-                : "#1D5393",
-            }}
+            <ListItemIcon
+              sx={{
+                color: location.pathname === "/dashboard" ? "white" : "#1D5393",
+              }}
+            >
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/dashboard/job"
+            className={listItemStyle("/dashboard/job")}
           >
-            <WorkIcon />
-          </ListItemIcon>
-          <ListItemText primary="Job" />
-        </ListItem>
-      </List>
-    </div>
+            <ListItemIcon
+              sx={{
+                color: location.pathname.startsWith("/dashboard/job")
+                  ? "white"
+                  : "#1D5393",
+              }}
+            >
+              <WorkIcon />
+            </ListItemIcon>
+            <ListItemText primary="Job" />
+          </ListItem>
+        </List>
+      </Grid>
+      {/* <Grid container justifyContent="center" item sx={{ my: 2 }}>
+        <Divider width="100%" sx={{ my: 2 }} />
+        <Button variant="outlined" component={Link} to="/reset-password">
+          Reset Password
+        </Button>
+      </Grid> */}
+    </Grid>
   );
 
   return (
