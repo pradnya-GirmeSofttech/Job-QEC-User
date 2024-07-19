@@ -15,7 +15,7 @@ import {
 import "../component/pages/Job/ProcessTable.css";
 import { formattedEditDate } from "./formattedDate";
 
-import { idleCode, machineData, processList, toolList, userName } from "./Data";
+import { idleCode, machineData, processList, toolListMilling, userName } from "./Data";
 
 function MillingTable({
   processTableData,
@@ -23,6 +23,7 @@ function MillingTable({
   processTableErrors,
   containerIndex,
 }) {
+  console.log("processTableDataMilling",processTableData)
   return (
     <>
       <Table sx={{ minWidth: 2800 }} aria-label="simple table">
@@ -191,7 +192,7 @@ function MillingTable({
                     }
                     error={processTableErrors[rowIndex]?.toolingUsed}
                   >
-                    {toolList.map((name) => (
+                    {toolListMilling.map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
                       </MenuItem>

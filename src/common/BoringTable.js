@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import "../component/pages/Job/ProcessTable.css";
 
-import { idleCode, machineData, processList, toolList, userName } from "./Data";
+import { idleCode, machineData, processList, toolListBoring, userName } from "./Data";
 import { formattedEditDate } from "./formattedDate";
 
 function BoringTable({
@@ -193,7 +193,7 @@ function BoringTable({
                     }
                     error={processTableErrors[rowIndex]?.toolingUsed}
                   >
-                    {toolList.map((name) => (
+                    {toolListBoring.map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
                       </MenuItem>

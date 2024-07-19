@@ -18,7 +18,7 @@ import {
 import "../component/pages/Job/ProcessTable.css";
 import { formattedEditDate } from "./formattedDate";
 
-import { idleCode, machineData, processList, toolList, userName } from "./Data";
+import { idleCode, machineData, processList, toolListTapping, userName } from "./Data";
 
 function TappingTable({
   processTableData,
@@ -188,7 +188,7 @@ function TappingTable({
                     }
                     error={processTableErrors[rowIndex]?.toolingUsed}
                   >
-                    {toolList.map((name) => (
+                    {toolListTapping.map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
                       </MenuItem>
